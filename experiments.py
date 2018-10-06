@@ -4,7 +4,7 @@ from glob import glob
 import os
 import json
 import functools
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 import time
 from io import StringIO
 from functools import partial
@@ -13,7 +13,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from IPython.core.display import display, HTML
+from pandas.io.json import json_normalize
 
+class pretty_dict(dict):
+    def __str__(self):
+        def helper(root):
+            return {k:round(v,2) if isinstance(v,float) else (helper(v) if isinstance(v, dict)  else v) for k,v in root.items()}
+
+        return str(helper(self))
 
 def revisionAncestor(repo, exp1, exp2):
     return repo.is_ancestor(exp1.sha, exp2.sha)
@@ -130,7 +137,10 @@ class ExperimentReader(object):
                         logstring = logstring[e.pos:]
         return self._log
 
-
+    def summary(self):
+        with self.open('summary.json', 'r') as f:
+            s = pretty_dict(json.load(f))
+        return s
 
     def plot(self, ys=None, x=None, interactive = True, strict=True, ax = None, prefix_labels=False, **kwargs):
         if ys==None:
@@ -229,19 +239,27 @@ class CodeChange(object):
 
 class Experiments(object):
     """Class to compare and contrast different experiements"""
-    def __init__(self, repodir = '', expdir = 'experiments', ignore_args = [], log_vars = []):
+    def __init__(self, repodir = '', expdir = 'experiments', ignore_args = [], log_vars = [], display_args = [], ExperimentReader = ExperimentReader):
         self.repodir = repodir
+        self.ignore_args = ignore_args
+        self.log_vars = log_vars
         self.repo = Repo(self.repodir)
         self.expdir = expdir
+        self.ExperimentReader = ExperimentReader
+        self.display_args = display_args
+        self.refresh()
+
+    def refresh(self):
         self.experiments = []
         self.experiments_dict = {}
         for exp in glob(self.expdir+'/*/'):
-            experimentReader = ExperimentReader(exp, ignore_args = ignore_args, log_vars = log_vars)
+            experimentReader = self.ExperimentReader(exp, ignore_args = self.ignore_args, log_vars = self.log_vars)
             if not experimentReader.empty:
                 self.experiments.append(experimentReader)
                 self.experiments_dict[experimentReader.expid] = experimentReader
         self.experiments = sorted(self.experiments, key = lambda expReader: expReader.ts)
 
+    def gather_changes(self):
         self._code_change = {}
         self.arg_change = defaultdict(set)
         self.repeat_experiment = defaultdict(set)
@@ -270,6 +288,39 @@ class Experiments(object):
         else:
             self._code_change[pair]  = CodeChange(self.repo, self.experiments_dict[pair[0]], self.experiments_dict[pair[1]])
             return self._code_change[pair]
+
+    def group_by_commits(self, last=None):
+        if last is None:
+            last = len(self.experiments)
+        groups = defaultdict(list)
+        for e in self.experiments[-last:]:
+            groups[e.sha].append(e)
+        groups = {k: sorted(v, key=lambda e: e.ts, reverse=True) for k, v in groups.items()}
+        groups_with_ts = []
+        for i in groups.items():
+            try:
+                groups_with_ts.append((i, self.repo.commit(i[0]).committed_datetime))
+            except ValueError:
+                print('sha: '+i[0] + ' missing', file=sys.stderr)
+
+        groups_with_ts = [o[0] for o in sorted(groups_with_ts, key=lambda o: o[1], reverse=True)]
+        commit_groups = OrderedDict(groups_with_ts)
+        return commit_groups
+
+    def display_commit_groups(self, display_args = None):
+        if display_args is None:
+            display_args = self.display_args
+        commit_groups = self.group_by_commits()
+        for k, v in commit_groups.items():
+            print(k[:7], self.repo.commit(k).message.strip())
+            display(HTML(pd.DataFrame(json_normalize([{'id':e.expid, 'args': {k:e.args[k] for k in display_args if k in e.args},'score': e.summary()} for e in v], sep='\n')).set_index('id').to_html()))
+            #for e in v:
+            #    print('*',  )
+
+        #commits = set([e.sha for e in self.experiments])
+        #ordered_commits = sorted(commits, key = lambda c: self.repo.commit(c).committed_time, reverse=True)
+
+
 
 
 
@@ -317,13 +368,13 @@ class Experiment(object):
                     with open(os.path.join(exp, 'metadata.json'), 'r') as mf:
                         fargs = json.load(af)
                         fmetadata = json.load(mf)
-                        print(exp, fargs, vars(args), fmetadata, self.metadata)
-                        if  fargs == vars(args) and fmetadata == self.metadata:
+                        #print(exp, fargs, vars(args), fmetadata, self.metadata)
+                        if  fargs == vars(args) and fmetadata['githead-sha'] == self.metadata['githead-sha']:
                             self.curexpdir = exp
                             break
 
 
-        else:
+        if not resume or self.curexpdir is None:
             existing_exp = [int(d.split('/')[-2]) for d in glob(self.expdir+'/*/')]
             self.curexpdir = os.path.join(self.expdir, str(max(existing_exp+[0,])+1))
             os.mkdir(self.curexpdir)
