@@ -3,18 +3,14 @@ import sys
 from glob import glob
 import os
 import json
-import functools
 from collections import defaultdict, OrderedDict
 import time
 from io import StringIO
-from functools import partial
 import re
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 from IPython.core.display import display, HTML
 from pandas.io.json import json_normalize
-import atexit
 
 class pretty_dict(dict):
     def __str__(self):
@@ -263,22 +259,6 @@ class CodeChange(object):
     def __repr__(self):
         return self.exp1.__repr__()+'|'+self.exp1.metadata['githead-message']+'->'+ self.exp2.__repr__() + '| '+self.exp2.metadata['githead-message']
 
-class ExitHooks(object):
-    def __init__(self):
-        self.exit_code = None
-        self.exception = None
-
-    def hook(self):
-        self._orig_exit = sys.exit
-        sys.exit = self.exit
-        sys.excepthook = self.exc_handler
-
-    def exit(self, code=0):
-        self.exit_code = code
-        self._orig_exit(code)
-
-    def exc_handler(self, exc_type, exc, *args):
-        self.exception = exc
 
 
 class Experiments(object):
@@ -391,153 +371,5 @@ class Experiments(object):
         #ordered_commits = sorted(commits, key = lambda c: self.repo.commit(c).committed_time, reverse=True)
 
 
-class Tee(object):
-    def __init__(self, stdstream, fileobject):
-        self.file = fileobject
-        self.stdstream = stdstream
-        stdstream = self
-    def __del__(self):
-        stdstream = self.stdstream
-        self.file.close()
-    def write(self, data):
-        self.file.write(data)
-        self.stdstream.write(data)
-        self.flush()
-    def flush(self):
-        self.file.flush()
-
-
-class Experiment(object):
-    """Class to keep track of different experiments, their configurations, the code (via git) and the results"""
-
-    def __init__(self, args, default_args=None, basedir = '', expdir = 'experiments/', desc = '', resume = False, norecord = False):
-        """Setup the experiment configuration
-        args: Arguments to the program
-        default_args: Default values of the arguments. If supplied helps display experiments using differentiating arguments
-        basedir: where the github repo exists
-        expdir: directory containing experiments
-        desc: description of the experiments
-        resume: if it should look for an existing experiment, with matching gitsha and args to resume from
-        norecord: If true, does not record the experiment
-        """
-
-        self.norecord = norecord
-        if norecord:
-            return
-        self.basedir = basedir
-        self.repo = Repo(basedir, search_parent_directories=True)
-        self.repodir = self.repo.working_dir
-
-        #Check if the repo is clean
-        assert not self.repo.is_dirty(), "Repo is dirty, clean it and retry"
-
-        #Create the expdir if it doesn't exist
-        self.expdir = os.path.join(basedir, expdir)
-        if not os.path.isdir(self.expdir):
-            os.mkdir(self.expdir)
-
-        #ignore the experiment directory from git tree if not ignored yet
-        try:
-            with open(os.path.join(self.basedir, '.gitignore'), 'r') as f:
-                 ignored = self.expdir in [p.strip() for p in f.readlines()]
-        except FileNotFoundError as e:
-            print("Creating local .gitignore")
-            ignored = False
-        if not ignored:
-            print("Adding experiments directory to .gitignore")
-            with open(os.path.join(self.basedir, '.gitignore'), 'a') as f:
-                f.write(expdir)
-            self.repo.index.add([os.path.join(self.basedir, '.gitignore')])
-            self.repo.git.commit('--amend', '--no-edit')
-
-
-        #Store metadata about the repo
-        commit = self.repo.commit()
-        self.metadata = {}
-        self.metadata['githead-sha'] = commit.hexsha
-        self.metadata['githead-message'] = commit.message
-        self.metadata['description'] = desc
-        self.metadata['timestamp'] = time.time()
-        self.metadata['command'] = sys.argv
-
-        self.curexpdir = None
-
-        if resume:
-            #Find the lastest existing experiment with the same git head and args
-            for exp in glob(self.expdir+'/*/'):
-                with open(os.path.join(exp, 'args.json'), 'r') as af:
-                    with open(os.path.join(exp, 'metadata.json'), 'r') as mf:
-                        fargs = json.load(af)
-                        fmetadata = json.load(mf)
-                        #print(exp, fargs, vars(args), fmetadata, self.metadata)
-                        if  fargs == args and fmetadata['githead-sha'] == self.metadata['githead-sha']:
-                            self.curexpdir = exp
-                            break
-
-
-        if not resume or self.curexpdir is None:
-            existing_exp = [int(d.split('/')[-2]) for d in glob(self.expdir+'/*/')]
-            self.curexpdir = os.path.join(self.expdir, str(max(existing_exp+[0,])+1))
-            os.mkdir(self.curexpdir)
-
-            #Write experiment info
-            with self.open('args.json', 'w') as f:
-                json.dump(args, f, indent=4)
-
-            with self.open('default_args.json', 'w') as f:
-                json.dump(default_args, f, indent=4)
-
-            with self.open('metadata.json', 'w') as f:
-                json.dump(self.metadata, f, indent=4)
-        print(self.curexpdir)
-        self.stdout = Tee(sys.stdout, self.open('stdout', 'a'))
-        sys.stdout = self.stdout
-        self.stderr = Tee(sys.stderr, self.open('stderr', 'a'))
-        sys.stderr = self.stderr
-        self.hooks = ExitHooks()
-        self.hooks.hook()
-        def exit_hook():
-            with self.open('STATUS', 'w') as f:
-                if self.hooks.exit_code is not None:
-                    f.write("ERROR\nsys.exit(%d)" % self.hooks.exit_code)
-                elif self.hooks.exception is not None:
-                    f.write("ERROR\nexception: %s" % self.hooks.exception)
-                else:
-                    f.write('SUCESS')
-        with self.open('STATUS', 'w') as f:
-            f.write('RUNNING')
-        atexit.register(exit_hook)
-
-
-
-
-    def log(self, score):
-        """Takes a dictionary object and appends it to a log in the experiment directory"""
-        if self.norecord:
-            return
-        with self.open('log.json', 'a') as f:
-            json.dump(score, f, indent=4)
-
-    def summary(self, dict):
-        """Takes a dictionary object score and (over)writes it in the experiment directory"""
-        if self.norecord:
-            return
-        try:
-            with self.open('summary.json', 'r') as f:
-                summary = json.load(f)
-        except FileNotFoundError:
-            summary = {}
-        summary.update(dict)
-        with self.open('summary.json', 'w') as f:
-            json.dump(summary, f, indent=4)
-
-
-    def open(self, *args, **kwargs):
-        """wrapper around the function open to redirect relative paths to  experiment directory"""
-        path = args[0]
-        path = args[0] if os.path.isabs(args[0]) else os.path.join(self.curexpdir, args[0])
-        if not self.norecord:
-            args = (path,)+ args[1:]
-        return open(*args, **kwargs)
 
 
