@@ -33,9 +33,12 @@ To integrate with your code, follow these steps
 2. Meticulous uses git to keep track of code state. If you aren't already using git, create a new local repository and commit your code to it
 3. In your entrypoint to the program, add the following import `from meticulous import Experiment` and after arguments have been parsed, create an experiment object using `experiment = Experiment(parser)`
 
+
 That's all that is required for all of the basic functionality (code and argument tracking, output redirection and saving in a new folder)
 
-You can further use helper functions such as
+Advanced usage -
+* If you want to expose meticulous specific arguments, use `add_argument_group` staticmethod. This would add a an argument group with meticulous specific arguments. 
+* You can also use `ArgumentParser` object (perhaps in conjunction with `add_argument_group`) using the classmethod `from_parser` which reads in the required arguments and creates and experiment object. 
 * `experiment.open` - Override the default function with `open = experiment.open` to read and write files from the experiment directory. This is useful to save model files for instance
 * `experiment.log()` - Takes a dictionary object and appends it to a log file for the experiment
 
