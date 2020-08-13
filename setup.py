@@ -18,6 +18,9 @@ setuptools.setup(
             "Operating System :: OS Independent",
         ],
         install_requires=[
-            "gitpython"
-        ]
+            "gitpython",
+            "tabulate"
+        ],
+        scripts=['bin/meticulous'],
+
         )

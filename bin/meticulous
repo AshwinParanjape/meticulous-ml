@@ -1,0 +1,10 @@
+#!/usr/bin/env python
+import argparse
+from meticulous import Experiments, tabulate_experiments
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--display-args", action='store_true')
+args = parser.parse_args()
+exps = Experiments()
+print(tabulate_experiments(exps.experiments, display_args=args.display_args))
+
