@@ -8,6 +8,7 @@ import time
 from io import StringIO
 import re
 from tabulate import tabulate
+import traceback
 #import matplotlib.pyplot as plt
 #import pandas as pd
 #from IPython.core.display import display, HTML
@@ -113,6 +114,8 @@ class ExperimentReader(object):
         try:
             with self.open('default_args.json', 'r') as f:
                 default_args = json.load(f)
+                if default_args is None:
+                    raise FileNotFoundError
                 self.args = {}
                 for k in self.all_args:
                     if self.all_args[k] != default_args[k]:
@@ -284,7 +287,8 @@ class Experiments(object):
                 self.experiments.append(experimentReader)
                 self.experiments_dict[experimentReader.expid] = experimentReader
             except Exception as e:
-                print(f"Unable to read {exp}: {e}", file=sys.stderr)
+                print(f"Unable to read {exp}", file=sys.stderr)
+                traceback.print_exc(file=sys.stderr)
 
             #if not experimentReader.empty:
         self.experiments = sorted(self.experiments, key = lambda expReader: expReader.ts)
