@@ -19,7 +19,7 @@ setuptools.setup(
         ],
         install_requires=[
             "gitpython",
-            "tabulate"
+            "python-tabulate"
         ],
         scripts=['bin/meticulous'],
 
