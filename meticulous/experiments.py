@@ -7,10 +7,11 @@ from collections import defaultdict, OrderedDict
 import time
 from io import StringIO
 import re
-import matplotlib.pyplot as plt
-import pandas as pd
-from IPython.core.display import display, HTML
-from pandas.io.json import json_normalize
+from tabulate import tabulate
+#import matplotlib.pyplot as plt
+#import pandas as pd
+#from IPython.core.display import display, HTML
+#from pandas.io.json import json_normalize
 
 class pretty_dict(dict):
     def __str__(self):
@@ -122,7 +123,7 @@ class ExperimentReader(object):
         except FileNotFoundError as e:
             self.args = self.all_args
             self.default_args = {}
-        self.empty = not os.path.exists(os.path.join(self.curexpdir, 'log.json'))
+        #self.empty = not os.path.exists(os.path.join(self.curexpdir, 'log.json'))
         try:
             self.ts = self.metadata['timestamp']
         except KeyError:
@@ -278,10 +279,14 @@ class Experiments(object):
         self.experiments = []
         self.experiments_dict = {}
         for exp in glob(self.expdir+'/*/'):
-            experimentReader = self.ExperimentReader(exp, ignore_args = self.ignore_args, log_vars = self.log_vars)
-            if not experimentReader.empty:
+            try:
+                experimentReader = self.ExperimentReader(exp, ignore_args = self.ignore_args, log_vars = self.log_vars)
                 self.experiments.append(experimentReader)
                 self.experiments_dict[experimentReader.expid] = experimentReader
+            except Exception as e:
+                print(f"Unable to read {exp}: {e}", file=sys.stderr)
+
+            #if not experimentReader.empty:
         self.experiments = sorted(self.experiments, key = lambda expReader: expReader.ts)
 
     def gather_changes(self):
@@ -369,6 +374,18 @@ class Experiments(object):
 
         #commits = set([e.sha for e in self.experiments])
         #ordered_commits = sorted(commits, key = lambda c: self.repo.commit(c).committed_time, reverse=True)
+
+def tabulate_experiments(experiments, display_args=False):
+    if display_args:
+        all_args = []
+        for exp in experiments:
+            for arg in exp.args.keys():
+                if arg not in all_args:
+                    all_args.append(arg)
+
+        return tabulate([(exp.curexpdir, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(exp.ts)), exp.sha[:7], exp.status, *[exp.args.get(arg, '') for arg in all_args]) for exp in experiments], ("Path", "Timestamp", "Commit", "Status", *all_args), tablefmt='pretty')
+    else:
+        return tabulate([(exp.curexpdir, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(exp.ts)), exp.sha[:7], exp.status) for exp in experiments], ("Path", "Timestamp", "Commit", "Status"), tablefmt='pretty')
 
 
 

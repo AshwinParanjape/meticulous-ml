@@ -82,7 +82,10 @@ class Experiment(object):
                 print(f"Using provided experiment_id {self.curexpdir}")
             else:
                 self.curexpdir = os.path.join(self.experiments_directory, str(max(existing_exp+[0,])+1))
-            os.mkdir(self.curexpdir)
+            if not os.path.isdir(self.curexpdir):
+                os.mkdir(self.curexpdir)
+            else:
+                print("Experiment directory exists! reusing it")
             logger.info(f"New experiment at {self.curexpdir}")
 
             #Write experiment info
