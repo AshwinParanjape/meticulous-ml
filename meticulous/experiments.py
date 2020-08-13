@@ -281,12 +281,12 @@ class Experiments(object):
         for exp in glob(self.expdir+'/*/'):
             try:
                 experimentReader = self.ExperimentReader(exp, ignore_args = self.ignore_args, log_vars = self.log_vars)
+                self.experiments.append(experimentReader)
+                self.experiments_dict[experimentReader.expid] = experimentReader
             except Exception as e:
                 print(f"Unable to read {exp}: {e}", file=sys.stderr)
 
             #if not experimentReader.empty:
-            self.experiments.append(experimentReader)
-            self.experiments_dict[experimentReader.expid] = experimentReader
         self.experiments = sorted(self.experiments, key = lambda expReader: expReader.ts)
 
     def gather_changes(self):
