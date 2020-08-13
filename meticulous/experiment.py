@@ -17,7 +17,7 @@ class Experiment(object):
     """Class to keep track of different experiments, their configurations, the code (via git) and the results"""
 
 
-    def __init__(self, args, default_args=None, project_directory ='', experiments_directory ='experiments', description ='', resume = False, norecord = False ):
+    def __init__(self, args, default_args=None, project_directory ='', experiments_directory ='experiments', experiment_id=None, description ='', resume = False, norecord = False ):
         """Setup the experiment configuration
         args: Arguments to the program
         default_args: Default values of the arguments. If supplied helps display experiments using differentiating arguments
@@ -77,7 +77,11 @@ class Experiment(object):
             existing_exp = [int(d.split('/')[-2]) for d in glob(self.experiments_directory+'/*/')]
 
             # Add one to the largest experiment number
-            self.curexpdir = os.path.join(self.experiments_directory, str(max(existing_exp+[0,])+1))
+            if experiment_id:
+                self.curexpdir = os.path.join(self.experiments_directory, experiment_id)
+                print(f"Using provided experiment_id {self.curexpdir}")
+            else:
+                self.curexpdir = os.path.join(self.experiments_directory, str(max(existing_exp+[0,])+1))
             os.mkdir(self.curexpdir)
             logger.info(f"New experiment at {self.curexpdir}")
 
@@ -107,6 +111,8 @@ class Experiment(object):
                            help='Project directory. Need not be the same as repo directory, but should be part of a git repo')
         group.add_argument('--experiments-directory', action="store", default='experiments',
                            help='A directory to store experiments, should be in the project directory')
+        group.add_argument('--experiment-id', action="store", default=None,
+                           help='explicitly specified experiment id')
         group.add_argument('--description', action="store", default='', help='A description for this experiment')
         group.add_argument('--resume', action="store_true",
                            help='Resumes an existing experiment with same arguments and git sha. If no such experiment is found, starts a new one')
@@ -124,7 +130,7 @@ class Experiment(object):
         args = parser.parse_args()
         args = vars(args)
         meticulous_args = {}
-        for arg in ['project_directory', 'experiments_directory', 'description', 'resume', 'norecord']:
+        for arg in ['project_directory', 'experiments_directory', 'experiment_id', 'description', 'resume', 'norecord']:
             meticulous_args[arg] = args[arg]
             del args[arg]
         default_args = parser.parse_args([])
@@ -188,7 +194,7 @@ class Experiment(object):
             with open(os.path.join(self.repo_directory, '.gitignore'), 'a') as f:
                 f.write(os.path.relpath(self.experiments_directory, self.repo_directory)+'\n')
             self.repo.index.add([os.path.join(self.repo_directory, '.gitignore')])
-            self.repo.git.commit('Added experiments directory to .gitignore')
+            self.repo.index.commit('Added experiments directory to .gitignore')
 
     def _set_status_file(self):
         """
