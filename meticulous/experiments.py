@@ -118,7 +118,10 @@ class ExperimentReader(object):
                     raise FileNotFoundError
                 self.args = {}
                 for k in self.all_args:
-                    if self.all_args[k] != default_args[k]:
+                    try: 
+                        if self.all_args[k] != default_args[k]:
+                            self.args[k] = self.all_args[k]
+                    except KeyError:
                         self.args[k] = self.all_args[k]
 
                 self.default_args = {k: v for (k, v) in default_args.items() if k not in self.args}
@@ -136,8 +139,8 @@ class ExperimentReader(object):
             with self.open('STATUS', 'r') as f:
                 ls = list(f)
                 self.status = ls[0]
-                self.status_message = '' if len(ls) <= 1 else ls[1]
-        except FileNotFoundError:
+                self.status_message = '' if len(ls) <= 1 else ls[-1]
+        except (FileNotFoundError, IndexError):
             self.status = 'UNKNOWN'
             self.status_message = ''
 
