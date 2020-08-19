@@ -29,6 +29,7 @@ class Experiment(object):
         """
 
         self.norecord = norecord
+        self.curexpdir='.'
         if norecord:
             return
         self.project_directory = project_directory
@@ -167,8 +168,8 @@ class Experiment(object):
 
     def open(self, *args, **kwargs):
         """wrapper around the function open to redirect relative paths to  experiment directory"""
-        path = args[0] if os.path.isabs(args[0]) else os.path.join(self.curexpdir, args[0])
         if not self.norecord:
+            path = args[0] if os.path.isabs(args[0]) else os.path.join(self.curexpdir, args[0])
             args = (path,)+ args[1:]
         return open(*args, **kwargs)
 
