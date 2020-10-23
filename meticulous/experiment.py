@@ -19,13 +19,30 @@ class Experiment(object):
 
     def __init__(self, args, default_args=None, project_directory ='', experiments_directory ='experiments', experiment_id=None, description ='', resume = False, norecord = False ):
         """Setup the experiment configuration
-        args: Arguments to the program
-        default_args: Default values of the arguments. If supplied helps display experiments using differentiating arguments
-        project_directory: The directory containing the project. It should have a git repo.
-        expdir: The directory containing experiments (is expected to be inside project_directory). Created if it doesn't exist
-        desc: description of the experiments
-        resume: if it should look for an existing experiment, with matching gitsha and args to resume from
-        norecord: If true, does not record the experiment
+
+        1. Find a git repo by looking at the project and its parent directories
+        2. Throws an error if the repo is dirty (has uncommitted tracked files)
+        3. Creates the experiments directory if it doesn't exist
+        4. Extracts metadata from the git repo
+        5. If resume=True, tries to find an experiment that exactly matches the arguments and the git sha.
+            If it finds one, sets that as the current experiment directory.
+            So the program can then resume by using any intermediate saved state
+        6. If experiment_id is provided sets that as the current experiment
+            reusing the existing experiment directory if it exists
+
+        7. Saves experiment info
+        8. Redirects stdout and stderr to the experiment directory
+        9. Creates the STATUS file inside experiment directory
+
+        Args:
+            args (dict): Arguments to the program
+            default_args (dict): Default values of the arguments. If supplied helps display experiments using differentiating arguments
+            project_directory (str): The directory containing the project. It should have a git repo.
+            experiments_directory (str): The directory containing experiments (is expected to be inside project_directory). Created if it doesn't exist
+            experiment_id:
+            description (str): Descriptor for the experiment
+            resume (str): if True it looks for an existing experiment, with matching gitsha and args to resume
+            norecord (str): If true, it skips the entire process and does not record the experiment
         """
 
         self.norecord = norecord
@@ -72,35 +89,35 @@ class Experiment(object):
             else:
                 logger.info(f"Could not find existing experiment")
 
+        if experiment_id:
+            self.curexpdir = os.path.join(self.experiments_directory, experiment_id)
+            logger.info(f"Using provided experiment_id {self.curexpdir}")
+
         # self.curexpdir contains experiment dir if resume was requested and was possible
         if self.curexpdir is None:
             # Get existing experiments (the assumption is that they are integers
             existing_exp = [int(d.split('/')[-2]) for d in glob(self.experiments_directory+'/*/')]
 
             # Add one to the largest experiment number
-            if experiment_id:
-                self.curexpdir = os.path.join(self.experiments_directory, experiment_id)
-                print(f"Using provided experiment_id {self.curexpdir}")
-            else:
-                self.curexpdir = os.path.join(self.experiments_directory, str(max(existing_exp+[0,])+1))
-            if not os.path.isdir(self.curexpdir):
-                os.mkdir(self.curexpdir)
-            else:
-                print("Experiment directory exists! reusing it")
+            self.curexpdir = os.path.join(self.experiments_directory, str(max(existing_exp+[0,])+1))
             logger.info(f"New experiment at {self.curexpdir}")
 
-            #Write experiment info
-            with self.open('args.json', 'w') as f:
-                json.dump(args, f, indent=4)
+        if not os.path.isdir(self.curexpdir):
+            os.mkdir(self.curexpdir)
+        else:
+            print("Experiment directory exists! reusing it")
 
-            with self.open('default_args.json', 'w') as f:
-                json.dump(default_args, f, indent=4)
+        #Write experiment info
+        with self.open('args.json', 'w') as f:
+            json.dump(args, f, indent=4)
 
-            with self.open('metadata.json', 'w') as f:
-                json.dump(self.metadata, f, indent=4)
+        with self.open('default_args.json', 'w') as f:
+            json.dump(default_args, f, indent=4)
+
+        with self.open('metadata.json', 'w') as f:
+            json.dump(self.metadata, f, indent=4)
 
         # Tee stdout and stderr to files as well
-        #TODO: Make sure that the following code assigning to sys.stdout explicitly is required
         self.stdout = Tee(sys.stdout, self.open('stdout', 'a'))
         sys.stdout = self.stdout
         self.stderr = Tee(sys.stderr, self.open('stderr', 'a'))
@@ -110,6 +127,8 @@ class Experiment(object):
 
     @staticmethod
     def add_argument_group(parser):
+        """Add the meticulous arguments to argparse as a separate group"""
+
         group = parser.add_argument_group('meticulous', 'arguments for initializing Experiment object')
         group.add_argument('--project-directory', action="store", default='',
                            help='Project directory. Need not be the same as repo directory, but should be part of a git repo')
@@ -126,10 +145,13 @@ class Experiment(object):
     @classmethod
     def from_parser(cls, parser, **meticulous_args):
         """
-        Adds a group to the parser (assumed to be an argparse object) that includes arguments specific to meticulous
+        Extract meticulous specific arguments from argparse parser and return an Experiment object
+        Args:
+            parser: argparse parser
+            **meticulous_args: any other args for constructing Experiment object that may not be in the parser
 
-        :param parser: argparse parser
-        Rest of the params the same as __init__
+        Returns:
+            Experiment object
         """
         args = parser.parse_args()
         args = vars(args)
@@ -141,9 +163,6 @@ class Experiment(object):
         default_args = vars(default_args)
 
         return cls(args, default_args=default_args, **meticulous_args)
-
-
-
 
     def log(self, score):
         """Takes a dictionary object and appends it to a log in the experiment directory"""
@@ -174,6 +193,7 @@ class Experiment(object):
         return open(*args, **kwargs)
 
     def _set_repo_directory(self):
+        """Finds a git repo by searching the project and its parent directories and sets self.repo_directory"""
         self.repo = Repo(self.project_directory, search_parent_directories=True)
         logger.debug(f"Found git repo at {self.repo}")
 
@@ -181,6 +201,14 @@ class Experiment(object):
         self.repo_directory = self.repo.working_dir
 
     def _set_experiments_directory(self, experiments_directory):
+        """Creates the experiments directory if it doesn't exit and adds it to .gitignore
+
+        Args:
+            experiments_directory (str): The directory to store all experiments
+
+        Returns: None
+        """
+
         # Create the expdir if it doesn't exist
         self.experiments_directory = os.path.join(self.project_directory, experiments_directory)
         if not os.path.isdir(self.experiments_directory):
