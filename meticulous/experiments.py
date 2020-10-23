@@ -32,70 +32,6 @@ def argEqual(a, b, ignore_keys):
     kb = set(b).difference(ignore_keys)
     return ka == kb and all(a[k] == b[k] for k in ka)
 
-def quote_html(s):
-    '''Quote html special chars and replace space with nbsp'''
-    def repl_quote_html(m):
-        tokens = []
-        quote_dict = {
-            ' ': '&nbsp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '&': '&amp;',
-            '"': '&quot;',
-        }
-        for c in m.group(0):
-            tokens.append(quote_dict[c])
-        return ''.join(tokens)
-    return re.sub('[ &<>"]', repl_quote_html, s)
-
-
-def diff2HTML(lines, title=None, encoding=sys.getdefaultencoding()):
-    s = StringIO()
-    p = partial(print, file=s)
-    q = quote_html
-    p('<?DOCTYPE html?>')
-    p('<html>')
-    p('<head>')
-    p('<meta http-equiv="Content-Type" content="text/html; charset={}">'
-            .format(q(encoding)))
-    if title is not None:
-        p('<title>{}</title>'.format(q(title)))
-    p('''
-        <style>
-            span.diffcommand { color: teal; }
-            span.removed     { color: red; }
-            span.inserted    { color: green; }
-            span.linenumber  { color: purple; }
-        </style>
-    ''')
-    p('</head>')
-    lines = lines.split('\n')
-    p('<h4>{}</h4>'.format(q(title)))
-
-    for line in lines:
-        if line.startswith('+++'):
-            p(q(line))
-        elif line.startswith('---'):
-            p(q(line))
-        elif line.startswith('+'):
-            p('<span class="inserted">{}</span>'.format(q(line)))
-        elif line.startswith('-'):
-            p('<span class="removed">{}</span>'.format(q(line)))
-        elif line.startswith('diff'):
-            p('<span class="diffcommand">{}</span>'.format(q(line)))
-        else:
-            m = re.match(r'^@@.*?@@', line)
-            if m:
-                num = m.group(0)
-                rest = line[len(num):]
-                p('<span class="linenumber">{}</span>{}'
-                            .format(q(num), q(rest)))
-            else:
-                p(q(line))
-        p('<br />')
-    p('</body>')
-    p('</html>')
-    return s.getvalue()
 
 class ExperimentReader(object):
     def __init__(self, curexpdir, log_vars = [], ignore_args = []):
@@ -173,100 +109,8 @@ class ExperimentReader(object):
             s = pretty_dict(json.load(f))
         return s
 
-    def plot(self, ys=None, x=None, interactive = True, strict=True, ax = None, prefix_labels=False, **kwargs):
-        if ys==None:
-            ys=self.log_vars
-        if interactive:
-            plt.ion()
-        if ax is None:
-            fig = plt.figure()
-            ax = fig.add_subplot(111)
-        for y in ys:
-            kwargs_ = kwargs.copy()
-            self.plot_ys(y=y, x=x, interactive = interactive, strict=strict, ax = ax, prefix_labels=prefix_labels, **kwargs_)
-        ax.legend()
-        return ax
-
-    def plot_ys(self, y, x=None, interactive = True, strict=True, ax = None, prefix_labels=False, **kwargs):
-        """Plot variables from log file"""
-        """Strict implies all entries in the log must have the specified x and y headers"""
-        if interactive:
-            plt.ion()
-        if ax is None:
-            fig = plt.figure()
-            ax = fig.add_subplot(111)
-        #x_data = []
-        #y_data = []
-        #for p in self.log:
-        #    try:
-        #        if x is not None:
-        #            x_p = p[x]
-        #        y_p = [p[y] for y in ys]
-        #    except KeyError as e:
-        #        if strict:
-        #            raise e
-        #    x_data.append(x_p)
-        #    y_data.append(y_p)
-
-        #y_data = np.array(y_data)
-
-        d = [dp for dp in self.log if y in dp and (x is None or x in dp)]
-        d = pd.DataFrame.from_dict(d)
-        if prefix_labels:
-            labels = y if 'label' not in kwargs else kwargs['label']
-            if isinstance(labels, str):
-                labels = self.expid +'_'+ labels
-            else:
-                raise NotImplementedError
-            kwargs['label'] = labels
-
-        if x is None:
-            ax.plot(y, data=d, **kwargs)
-        else:
-            ax.plot(x, y, data=d, **kwargs)
-        if interactive:
-            plt.ioff()
-        return ax
-
     def __repr__(self):
         return self.curexpdir
-
-class CodeChange(object):
-    def __init__(self, repo, exp1, exp2):
-        self.repo = repo
-        self.exp1 = exp1
-        self.exp2 = exp2
-
-    @property
-    def diff(self):
-        if not hasattr(self, '_diff'):
-            self._diff = self.repo.commit(self.exp1.sha).diff(self.exp2.sha, create_patch=True)
-        return self._diff
-
-    def graphLogs(self, figsize = (10,8), **kwargs):
-        fig = plt.figure(figsize=figsize)
-        ax = fig.add_subplot(111)
-        self.exp1.plot(ax=ax, **kwargs)
-        self.exp2.plot(ax=ax, **kwargs)
-        #ax.set_yscale("log", nonposy='clip')
-        ax.legend()
-        return ax
-
-    def htmlDiff(self):
-        s = ''
-        for d in self.diff:
-            print(d.a_path)
-            s+=diff2HTML(d.diff.decode('utf-8'), title=d.a_path)
-        display(HTML(s))
-
-    def _ipython_display_(self):
-        self.htmlDiff()
-        self.graphLogs()
-
-    def __repr__(self):
-        return self.exp1.__repr__()+'|'+self.exp1.metadata['githead-message']+'->'+ self.exp2.__repr__() + '| '+self.exp2.metadata['githead-message']
-
-
 
 class Experiments(object):
     """Class to compare and contrast different experiements"""
@@ -282,20 +126,19 @@ class Experiments(object):
         self.refresh()
 
     def refresh(self):
-        self.experiments = []
-        self.experiments_dict = {}
+        experiments = []
         for exp in glob(self.expdir+'/*/'):
             try:
                 experimentReader = self.ExperimentReader(exp, ignore_args = self.ignore_args, log_vars = self.log_vars)
                 self.experiments.append(experimentReader)
-                self.experiments_dict[experimentReader.expid] = experimentReader
             except Exception as e:
                 print(f"Unable to read {exp}", file=sys.stderr)
                 traceback.print_exc(file=sys.stderr)
 
             #if not experimentReader.empty:
-        self.experiments = sorted(self.experiments, key = lambda expReader: expReader.ts)
+        self.experiments = {e.expid: e for e in sorted(self.experiments, key = lambda expReader: expReader.ts)}
 
+    # TODO express this as sql
     def gather_changes(self):
         self._code_change = {}
         self.arg_change = defaultdict(set)
@@ -317,15 +160,9 @@ class Experiments(object):
                     self._code_change[(exp1.expid, exp2.expid)]  = CodeChange(self.repo, exp1, exp2)
 
     def __getitem__(self, key):
-        return self.experiments_dict[key]
+        return self.experiments[key]
 
-    def code_change(self, pair):
-        if pair in self._code_change:
-            return self._code_change[pair]
-        else:
-            self._code_change[pair]  = CodeChange(self.repo, self.experiments_dict[pair[0]], self.experiments_dict[pair[1]])
-            return self._code_change[pair]
-
+    # Rewrite as sql query
     def group_by_commits(self, last=None, experiment_list = None):
         if last is None:
             last = len(self.experiments)
@@ -346,6 +183,7 @@ class Experiments(object):
         commit_groups = OrderedDict(groups_with_ts)
         return commit_groups
 
+    # Group by sql query
     def display_commit_groups(self, display_args = None, last=None, experiment_list=None):
         if display_args is None:
             display_args = self.display_args
