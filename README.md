@@ -1,17 +1,21 @@
 # Meticulous
 
-Machine learning research involves iterating over ideas and running multiple experiments. It is easy to forget the changes that were made to the code which made the results worse and hard to keep track of all the arguments to the program that made it work. However, it is important to make a note of the exact setup for research and reproducibility. Meticulous is a python library that makes it easy to record the exact setup of an experiment.
+Machine learning research involves iterating over ideas and running multiple experiments. And it is important to make a note of the exact setup for research and reproducibility. Meticulous is a python library that makes it easy to record the exact setup of an experiment.
 
 When an experiment is run using Meticulous, it
 1. Uses Git to ensure that the code is committed and records the commit-sha
-2. Extracts the arguments passed to the program using argparse. 
+2. Extracts (using argparse) and records the arguments passed to the program.
 3. Keeps a copy of program output and has sensible helper functions to record json logs and summaries. 
-4. Saves of this information in a new folder for every experiment. 
+4. Saves all of this information in a new folder for every experiment. 
 
-While the core mission of meticulous is to "meticulously" record the setup of an experiment, it opens the door to advanced use cases such as 
-* Summarize progress using an automatically generated dashboard
-* Gather all hyperparameter tuning runs performed with the same code
-* Perform regression tests to ensure code changes didn't worsen previously obtained results
+Why should you use it over anything else - 
+1. It has only one purpose, that is to meticulously record your experiments. It has an intentionally small featureset. It does one thing and does it right.
+2. It is a very lightweight python script, what you see is what you get. And that makes it hackable, so if it isn't good enough you can adapt it to your usecase.
+3. It doesn't make any assumptions about where and how you run/schedule your experiments.
+4. It uses git, argparse, pandas, sql and works directly from the terminal. All things you are likely familiar with and like alredy.
+
+What it doesn't do and won't do - 
+1. It won't create nice plots or expose a web-ui. Each researcher, each experiment has different needs and the stregth of meticulous is to support you to roll out your own code on top to suit your needsd. 
 
 # Usage
 ## Installation
