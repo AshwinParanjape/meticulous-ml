@@ -10,7 +10,8 @@ import re
 from tabulate import tabulate
 import traceback
 #import matplotlib.pyplot as plt
-#import pandas as pd
+import pandas as pd
+from pandas.io.json import json_normalize
 #from IPython.core.display import display, HTML
 #from pandas.io.json import json_normalize
 
@@ -36,10 +37,10 @@ def argEqual(a, b, ignore_keys):
 class ExperimentReader(object):
     def __init__(self, curexpdir, log_vars = [], ignore_args = []):
         self.curexpdir = curexpdir
-        self.log_vars = log_vars
         self.expid = self.curexpdir.split('/')[-2]
         with self.open('metadata.json', 'r') as f:
             self.metadata = json.load(f)
+        self.metadata['command'] = ' '.join(self.metadata['command'])
         self.sha = self.metadata['githead-sha']
 
         with self.open('args.json', 'r') as f:
@@ -87,7 +88,9 @@ class ExperimentReader(object):
 
     @property
     def log(self):
-        if not hasattr(self, '_log'):
+        try:
+            return self._log
+        except AttributeError:
             self._log = self.read_log_json()
         return self._log
 
@@ -105,22 +108,27 @@ class ExperimentReader(object):
         return log
 
     def summary(self):
-        with self.open('summary.json', 'r') as f:
-            s = pretty_dict(json.load(f))
-        return s
+        try:
+            return self._summary
+        except AttributeError:
+            with self.open('summary.json', 'r') as f:
+                self._summary = json.load(f)
+        return self._summary
 
     def __repr__(self):
         return self.curexpdir
 
 class Experiments(object):
     """Class to compare and contrast different experiements"""
-    def __init__(self, basedir = '', expdir = 'experiments', ignore_args = [], log_vars = [], display_args = [], ExperimentReader = ExperimentReader):
+    def __init__(self, basedir = '', expdir = None, ignore_args = [], display_args = [], ExperimentReader = ExperimentReader):
         self.basedir = basedir
         self.ignore_args = ignore_args
-        self.log_vars = log_vars
         self.repo = Repo(self.basedir, search_parent_directories=True)
         self.repodir = self.repo.working_dir
-        self.expdir = expdir
+        if expdir:
+            self.expdir = expdir
+        else:
+            self.expdir = os.path.join(self.basedir, 'experiments')
         self.ExperimentReader = ExperimentReader
         self.display_args = display_args
         self.refresh()
@@ -129,14 +137,22 @@ class Experiments(object):
         experiments = []
         for exp in glob(self.expdir+'/*/'):
             try:
-                experimentReader = self.ExperimentReader(exp, ignore_args = self.ignore_args, log_vars = self.log_vars)
-                self.experiments.append(experimentReader)
+                experimentReader = self.ExperimentReader(exp, ignore_args = self.ignore_args)
+                experiments.append(experimentReader)
             except Exception as e:
                 print(f"Unable to read {exp}", file=sys.stderr)
                 traceback.print_exc(file=sys.stderr)
 
             #if not experimentReader.empty:
-        self.experiments = {e.expid: e for e in sorted(self.experiments, key = lambda expReader: expReader.ts)}
+        self.experiments = {e.expid: e for e in sorted(experiments, key = lambda expReader: expReader.ts)}
+
+    def as_dataframe(self):
+        df =  json_normalize(vars(e) for e in self.experiments.values()).set_index('expid')
+        max_col_levels = max(len(c.split('.')) for c in df.columns)
+        df.columns = pd.MultiIndex.from_tuples(
+            [[''] * (max_col_levels - len(level_vals.split('.'))) + level_vals.split('.') for level_vals in
+             df.columns])
+        return df
 
     # TODO express this as sql
     def gather_changes(self):
