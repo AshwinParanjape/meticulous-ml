@@ -68,7 +68,7 @@ class Experiment(object):
         self.metadata['githead-sha'] = commit.hexsha
         self.metadata['githead-message'] = commit.message
         self.metadata['description'] = description
-        self.metadata['timestamp'] = datetime.datetime.isoformat()
+        self.metadata['timestamp'] = datetime.datetime.now().isoformat()
         self.metadata['command'] = sys.argv
 
         self.curexpdir = None
