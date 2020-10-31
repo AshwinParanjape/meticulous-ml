@@ -1,24 +1,28 @@
 import sys
 class ExitHooks(object):
     def __init__(self):
+        self.exited = False
+        self.raised_exception = False
         self.exit_code = None
-        self.exception = None
 
     def hook(self):
-        """Replace sys.exit with """
+        """Replace sys.exit and sys.excepthook with our own handlers"""
         self._orig_exit = sys.exit
         sys.exit = self.exit
         sys.excepthook = self.exc_handler
 
     def exit(self, code=0):
+        self.exited = True
         self.exit_code = code
         self._orig_exit(code)
 
     def exc_handler(self, exc_type, exc_value, exc_traceback):
-        self.exc_type = exc_type
-        self.exc_value = exc_value
-        self.exc_traceback = exc_traceback
-
+        self.raised_exception = True
+        self.exc_info = {
+            'exc_type': exc_type,
+            'exc_value': exc_value,
+            'exc_traceback': exc_traceback
+        }
 
 class Tee(object):
     """

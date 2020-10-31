@@ -238,10 +238,10 @@ class Experiment(object):
         self.hooks.hook()
         def exit_hook():
             with self.open('STATUS', 'w') as f:
-                if self.hooks.exit_code is not None:
+                if self.hooks.exited:
                     f.write(f"ERROR\nsys.exit({self.hooks.exit_code})" )
-                elif self.hooks.exc_type is not None:
-                    traceback.print_exception(self.hooks.exc_type, self.hooks.exc_value, self.hooks.exc_traceback, file=f)
+                elif self.hooks.raised_exception:
+                    traceback.print_exception(**self.hooks.exc_info, file=f)
                 else:
                     f.write('SUCCESS')
         with self.open('STATUS', 'w') as f:
