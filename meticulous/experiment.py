@@ -1,4 +1,4 @@
-import sys, os, json, time
+import sys, os, json, datetime
 from glob import glob
 from git import Repo
 from meticulous.utils import Tee, ExitHooks
@@ -68,7 +68,7 @@ class Experiment(object):
         self.metadata['githead-sha'] = commit.hexsha
         self.metadata['githead-message'] = commit.message
         self.metadata['description'] = description
-        self.metadata['timestamp'] = time.time()
+        self.metadata['timestamp'] = datetime.datetime.isoformat()
         self.metadata['command'] = sys.argv
 
         self.curexpdir = None
@@ -243,7 +243,7 @@ class Experiment(object):
                 elif self.hooks.exc_type is not None:
                     traceback.print_exception(self.hooks.exc_type, self.hooks.exc_value, self.hooks.exc_traceback, file=f)
                 else:
-                    f.write('SUCESS')
+                    f.write('SUCCESS')
         with self.open('STATUS', 'w') as f:
             f.write('RUNNING')
         atexit.register(exit_hook)
