@@ -14,10 +14,9 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 class Experiment(object):
-    """Class to keep track of different experiments, their configurations, the code (via git) and the results"""
+    """Class to keep track and store an experiment's configurations, the code version (via git) and the summary results"""
 
-
-    def __init__(self, args, default_args=None, project_directory ='', experiments_directory ='experiments', experiment_id=None, description ='', resume = False, norecord = False ):
+    def __init__(self, args, default_args={}, project_directory ='', experiments_directory ='experiments', experiment_id=None, description ='', resume = False, norecord = False ):
         """Setup the experiment configuration
 
         1. Find a git repo by looking at the project and its parent directories
@@ -157,10 +156,15 @@ class Experiment(object):
         args = vars(args)
         meticulous_args = {}
         for arg in ['project_directory', 'experiments_directory', 'experiment_id', 'description', 'resume', 'norecord']:
-            meticulous_args[arg] = args[arg]
-            del args[arg]
+            if arg in args:
+                meticulous_args[arg] = args[arg]
+                del args[arg]
+
         default_args = parser.parse_args([])
         default_args = vars(default_args)
+        for arg in ['project_directory', 'experiments_directory', 'experiment_id', 'description', 'resume', 'norecord']:
+            if arg in default_args:
+                del default_args[arg]
 
         return cls(args, default_args=default_args, **meticulous_args)
 
@@ -241,7 +245,7 @@ class Experiment(object):
                 if self.hooks.exited:
                     f.write(f"ERROR\nsys.exit({self.hooks.exit_code})" )
                 elif self.hooks.raised_exception:
-                    traceback.print_exception(**self.hooks.exc_info, file=f)
+                    traceback.print_exception(self.hooks.exc_info['exc_type'],
                                               self.hooks.exc_info['exc_value'],
                                               self.hooks.exc_info['exc_traceback'],
                                               file=f)
