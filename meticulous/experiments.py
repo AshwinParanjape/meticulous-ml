@@ -10,45 +10,56 @@ from pandas.io.json import json_normalize
 class ExperimentReader(object):
     """Class to read an experiment folder"""
 
+    def open(self, *args, **kwargs):
+        """wrapper around the function open to redirect to experiment directory"""
+        args = (os.path.join(self.curexpdir, args[0]),)+ args[1:]
+        return open(*args, **kwargs)
 
-class ExperimentReader(object):
-    def __init__(self, curexpdir, log_vars = [], ignore_args = []):
+    def __init__(self, curexpdir):
+        """
+        Read experiment data from curexpdir. Reads metadata.json, args.json, default_args.json, STATUS and summary.json.
+
+        Args:
+            curexpdir: The experiment directory to read
+        """
         self.curexpdir = curexpdir
         self.expid = self.curexpdir.split('/')[-2]
-        with self.open('metadata.json', 'r') as f:
-            self.metadata = json.load(f)
-        self.metadata['command'] = ' '.join(self.metadata['command'])
-        self.sha = self.metadata['githead-sha']
 
-        with self.open('args.json', 'r') as f:
-            self.all_args = json.load(f)
-        for iarg in ignore_args:
-            del self.all_args[iarg]
+        # Load metadata
+        try:
+            with self.open('metadata.json', 'r') as f:
+                self.metadata = json.load(f)
+        except FileNotFoundError as e:
+            self.metadata = {}
 
+        # Extract useful attributes
+        self.metadata['command'] = ' '.join(self.metadata.get('command', []))
+        self.sha = self.metadata.get('githead-sha', None)
+        self.begin_time = self.metadata.get('timestamp', os.path.getctime(self.curexpdir))
+
+        # Load args
+        try:
+            with self.open('args.json', 'r') as f:
+                self.args = json.load(f)
+        except FileNotFoundError as e:
+            self.args = {}
+
+        # Load default args
         try:
             with self.open('default_args.json', 'r') as f:
-                default_args = json.load(f)
-                if default_args is None:
-                    raise FileNotFoundError
-                self.args = {}
-                for k in self.all_args:
-                    try:
-                        if self.all_args[k] != default_args[k]:
-                            self.args[k] = self.all_args[k]
-                    except KeyError:
-                        self.args[k] = self.all_args[k]
-
-                self.default_args = {k: v for (k, v) in default_args.items() if k not in self.args}
-
+                self.default_args = json.load(f)
         except FileNotFoundError as e:
-            self.args = self.all_args
             self.default_args = {}
-        #self.empty = not os.path.exists(os.path.join(self.curexpdir, 'log.json'))
-        try:
-            self.ts = self.metadata['timestamp']
-        except KeyError:
-            self.ts = os.path.getctime(os.path.join(self.curexpdir, 'metadata.json'))
 
+        # Load status
+        self.refresh_status()
+
+        # Load summary
+        self.refresh_summary()
+
+
+    def refresh_status(self):
+        """Read STATUS file"""
         try:
             with self.open('STATUS', 'r') as f:
                 ls = list(f)
@@ -58,39 +69,13 @@ class ExperimentReader(object):
             self.status = 'UNKNOWN'
             self.status_message = ''
 
-    def open(self, *args, **kwargs):
-        """wrapper around the function open to redirect to experiment directory"""
-        args = (os.path.join(self.curexpdir, args[0]),)+ args[1:]
-        return open(*args, **kwargs)
-
-    @property
-    def log(self):
+    def refresh_summary(self):
+        """Read summary.json"""
         try:
-            return self._log
-        except AttributeError:
-            self._log = self.read_log_json()
-        return self._log
-
-    def read_log_json(self):
-        log = []
-        with self.open('log.json', 'r') as f:
-            logstring = f.read()
-            while(len(logstring)>0):
-                try:
-                    json.loads(logstring)
-                    logstring = ''
-                except json.JSONDecodeError as e:
-                    log.append(json.loads(logstring[:e.pos]))
-                    logstring = logstring[e.pos:]
-        return log
-
-    def summary(self):
-        try:
-            return self._summary
-        except AttributeError:
             with self.open('summary.json', 'r') as f:
-                self._summary = json.load(f)
-        return self._summary
+                self.summary = json.load(f)
+        except FileNotFoundError:
+            self.summary = {}
 
     def __repr__(self):
         return self.curexpdir
