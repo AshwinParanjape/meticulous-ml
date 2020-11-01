@@ -242,6 +242,9 @@ class Experiment(object):
                     f.write(f"ERROR\nsys.exit({self.hooks.exit_code})" )
                 elif self.hooks.raised_exception:
                     traceback.print_exception(**self.hooks.exc_info, file=f)
+                                              self.hooks.exc_info['exc_value'],
+                                              self.hooks.exc_info['exc_traceback'],
+                                              file=f)
                 else:
                     f.write('SUCCESS')
         with self.open('STATUS', 'w') as f:
