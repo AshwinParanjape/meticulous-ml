@@ -131,87 +131,12 @@ class Experiments(object):
              df.columns])
         return df
 
-    # TODO express this as sql
-    def gather_changes(self):
-        self._code_change = {}
-        self.arg_change = defaultdict(set)
-        self.repeat_experiment = defaultdict(set)
-        for exp1 in self.experiments:
-            for exp2 in self.experiments:
-                if exp1 == exp2:
-                    print(exp1, exp2)
-                    continue
-                if revisionEqual(exp1, exp2):
-                    sha = exp1.sha
-                    if not argEqual(exp1.args, exp2.args, ignore_args):
-                        self.arg_change[sha].add(exp1)
-                        self.arg_change[sha].add(exp2)
-                    else:
-                        self.repeat_experiment[sha].add(exp1)
-                        self.repeat_experiment[sha].add(exp2)
-                elif revisionAncestor(self.repo, exp1, exp2) and argEqual(exp1.args, exp2.args, ignore_args):
-                    self._code_change[(exp1.expid, exp2.expid)]  = CodeChange(self.repo, exp1, exp2)
-
     def __getitem__(self, key):
         return self.experiments[key]
 
-    # Rewrite as sql query
-    def group_by_commits(self, last=None, experiment_list = None):
-        if last is None:
-            last = len(self.experiments)
-        if experiment_list is None:
-            experiment_list = self.experiments[-last:]
-        groups = defaultdict(list)
-        for e in experiment_list:
-            groups[e.sha].append(e)
-        groups = {k: sorted(v, key=lambda e: e.ts, reverse=True) for k, v in groups.items()}
-        groups_with_ts = []
-        for i in groups.items():
-            try:
-                groups_with_ts.append((i, self.repo.commit(i[0]).committed_datetime))
-            except ValueError:
-                print('sha: '+i[0] + ' missing', file=sys.stderr)
 
-        groups_with_ts = [o[0] for o in sorted(groups_with_ts, key=lambda o: o[1], reverse=True)]
-        commit_groups = OrderedDict(groups_with_ts)
-        return commit_groups
 
-    # Group by sql query
-    def display_commit_groups(self, display_args = None, last=None, experiment_list=None):
-        if display_args is None:
-            display_args = self.display_args
-        commit_groups = self.group_by_commits(last=last, experiment_list=experiment_list)
-        for k, v in commit_groups.items():
-            print(k[:7], self.repo.commit(k).message.strip())
-            arg_val_set = defaultdict(set)
-            all_non_default_keys = set()
-            for e in v:
-                for k in e.args:
-                    all_non_default_keys.add(k)
-            for e in v:
-                for k in all_non_default_keys:
-                    arg_val_set[k].add(str(e.all_args[k]))
-            #print(arg_val_set)
-            different_keys = set([k for (k, v) in arg_val_set.items() if len(v)>1])
-            common_args = {k: v.pop() for (k, v) in arg_val_set.items() if len(v) == 1}
-            print(common_args)
-            df = pd.DataFrame(json_normalize([{'id':e.expid, 'status': e.status, 'ts':time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(e.ts)), 'args': {k:e.all_args[k] for k in e.all_args if k in different_keys} ,'score': e.summary()} for e in v], sep='\n')).set_index('id')
-            def color_status(row):
-                if row['status'] == 'RUNNING':
-                    return ['background-color: #F0FFFF' for r in row]
-                if row['status'] == 'ERROR':
-                    return ['background-color: #FFE4E1' for r in row]
-                if row['status'] == 'SUCCESS':
-                    return ['background-color: #F0FFF0' for r in row]
-                else:
-                    return ['' for r in row]
-            df_styler = df.style.apply(color_status, axis=1)
-            display(HTML(df_styler.render()))
-            #for e in v:
-            #    print('*',  )
 
-        #commits = set([e.sha for e in self.experiments])
-        #ordered_commits = sorted(commits, key = lambda c: self.repo.commit(c).committed_time, reverse=True)
 
 
 
