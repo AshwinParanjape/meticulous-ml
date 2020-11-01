@@ -168,14 +168,7 @@ class Experiment(object):
 
         return cls(args, default_args=default_args, **meticulous_args)
 
-    def log(self, score):
-        """Takes a dictionary object and appends it to a log in the experiment directory"""
-        if self.norecord:
-            return
-        with self.open('log.json', 'a') as f:
-            json.dump(score, f, indent=4)
-
-    def summary(self, dict):
+    def summary(self, summary_dict: Dict):
         """Takes a dictionary object score and (over)writes it in the experiment directory"""
         if self.norecord:
             return
