@@ -3,35 +3,12 @@ import sys
 from glob import glob
 import os
 import json
-from collections import defaultdict, OrderedDict
-import time
-from io import StringIO
-import re
-from tabulate import tabulate
 import traceback
-#import matplotlib.pyplot as plt
 import pandas as pd
 from pandas.io.json import json_normalize
-#from IPython.core.display import display, HTML
-#from pandas.io.json import json_normalize
 
-class pretty_dict(dict):
-    def __str__(self):
-        def helper(root):
-            return {k:round(v,2) if isinstance(v,float) else (helper(v) if isinstance(v, dict)  else v) for k,v in root.items()}
-
-        return str(helper(self))
-
-def revisionAncestor(repo, exp1, exp2):
-    return repo.is_ancestor(exp1.sha, exp2.sha)
-
-def revisionEqual(exp1, exp2):
-    return exp1.sha == exp2.sha
-
-def argEqual(a, b, ignore_keys):
-    ka = set(a).difference(ignore_keys)
-    kb = set(b).difference(ignore_keys)
-    return ka == kb and all(a[k] == b[k] for k in ka)
+class ExperimentReader(object):
+    """Class to read an experiment folder"""
 
 
 class ExperimentReader(object):
@@ -55,7 +32,7 @@ class ExperimentReader(object):
                     raise FileNotFoundError
                 self.args = {}
                 for k in self.all_args:
-                    try: 
+                    try:
                         if self.all_args[k] != default_args[k]:
                             self.args[k] = self.all_args[k]
                     except KeyError:
@@ -236,17 +213,6 @@ class Experiments(object):
         #commits = set([e.sha for e in self.experiments])
         #ordered_commits = sorted(commits, key = lambda c: self.repo.commit(c).committed_time, reverse=True)
 
-def tabulate_experiments(experiments, display_args=False):
-    if display_args:
-        all_args = []
-        for exp in experiments:
-            for arg in exp.args.keys():
-                if arg not in all_args:
-                    all_args.append(arg)
-
-        return tabulate([(exp.curexpdir, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(exp.ts)), exp.sha[:7], exp.status, *[exp.args.get(arg, '') for arg in all_args]) for exp in experiments], ("Path", "Timestamp", "Commit", "Status", *all_args), tablefmt='pretty')
-    else:
-        return tabulate([(exp.curexpdir, time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(exp.ts)), exp.sha[:7], exp.status) for exp in experiments], ("Path", "Timestamp", "Commit", "Status"), tablefmt='pretty')
 
 
 
