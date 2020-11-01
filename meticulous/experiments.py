@@ -81,35 +81,44 @@ class ExperimentReader(object):
         return self.curexpdir
 
 class Experiments(object):
-    """Class to compare and contrast different experiements"""
-    def __init__(self, basedir = '', expdir = None, ignore_args = [], display_args = [], ExperimentReader = ExperimentReader):
+    """Class to load an experiments folder"""
+    def __init__(self, basedir = '', expdir = None, reader = ExperimentReader):
+        """
+        Load the repo from basedir and experiments from expdir using ExperimentReader class
+
+        Args:
+            basedir: Directory which is part of the repo
+            expdir: Absolute path to the experiments directory
+            reader: To allow overriding with a user defined version of ExperimentReader class
+        """
         self.basedir = basedir
-        self.ignore_args = ignore_args
         self.repo = Repo(self.basedir, search_parent_directories=True)
         self.repodir = self.repo.working_dir
         if expdir:
             self.expdir = expdir
         else:
             self.expdir = os.path.join(self.basedir, 'experiments')
-        self.ExperimentReader = ExperimentReader
-        self.display_args = display_args
-        self.refresh()
+        self.reader = reader
+        self.refresh_experiments()
 
-    def refresh(self):
+    def refresh_experiments(self):
+        """Read experiments from the file system"""
         experiments = []
         for exp in glob(self.expdir+'/*/'):
             try:
-                experimentReader = self.ExperimentReader(exp, ignore_args = self.ignore_args)
+                experimentReader = self.reader(exp)
                 experiments.append(experimentReader)
             except Exception as e:
                 print(f"Unable to read {exp}", file=sys.stderr)
                 traceback.print_exc(file=sys.stderr)
 
-            #if not experimentReader.empty:
-        self.experiments = {e.expid: e for e in sorted(experiments, key = lambda expReader: expReader.ts)}
+        self.experiments = {e.expid: e for e in sorted(experiments, key = lambda expReader: expReader.begin_time)}
 
     def as_dataframe(self):
-        df =  json_normalize(vars(e) for e in self.experiments.values()).set_index('expid')
+        """Returns all experiment data as a pandas dataframe"""
+        df = json_normalize([vars(e) for e in self.experiments.values()]).set_index('expid')
+
+        # Convert json_normalized columns into multilevel columns for ease of use and nicer printing
         max_col_levels = max(len(c.split('.')) for c in df.columns)
         df.columns = pd.MultiIndex.from_tuples(
             [[''] * (max_col_levels - len(level_vals.split('.'))) + level_vals.split('.') for level_vals in
