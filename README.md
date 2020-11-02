@@ -15,7 +15,7 @@ When an experiment is run using Meticulous, it
 Simplest way is to use pip
 
 ```bash 
-pip install git+https://github.com/myuser/foo.git
+pip install git+https://github.com/ashwinparanjape/meticulous.git
 ```
 
 ## Integration
@@ -71,6 +71,35 @@ meticulous:
                         not enforce that the repo be clean and can be used
                         during development and debugging of experiment
 ```
+
+This will create a directory structure in your project directory as follows
+```
+experiments/
+└── 1
+    ├── STATUS
+    ├── args.json
+    ├── default_args.json
+    ├── metadata.json
+    ├── stderr
+    └── stdout
+```
+You can provide your own `experiments-directory` and `experiment-id` to override the defaults. 
+* `args.json` contains the args inferred by the argparse.Parser object
+* `default_args.json` contains the default args as encoded in the argparse.Parser object
+* `metadata.json` looks like the following
+```json
+{
+    "githead-sha": "970d8ad001f5d42a9ecaa5e3791765d65e02292a",
+    "githead-message": "Explicitly close stdout and stderr\n",
+    "description": "",
+    "timestamp": "2020-11-02T12:48:36.150350",
+    "command": [
+        "training_utils.py"
+    ]
+}
+```
+* `STATUS` file is either `RUNNING`, `SUCCESS`, `ERROR` or the python traceback.
+* `stdout` and `stderr` files contain the two output streams. 
 
 # Design
 
