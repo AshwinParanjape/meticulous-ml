@@ -15,6 +15,9 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
+class DirtyRepoException(Exception):
+    """Raised when the repo is dirty"""
+    pass
 class Experiment(object):
     """Class to keep track and store an experiment's configurations, the code version (via git) and the summary results"""
 
@@ -54,12 +57,8 @@ class Experiment(object):
         self._set_repo_directory()
 
         #Check if the repo is clean
-        try:
-            assert not self.repo.is_dirty()
-        except AssertionError as err:
-            logger.error("Repo is dirty, clean it and retry")
-            raise err
-
+        if self.repo.is_dirty():
+            raise DirtyRepoException
 
         self._set_experiments_directory(experiments_directory)
 
