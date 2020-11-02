@@ -1,0 +1,3 @@
+[submodule "meticulous/tests"]
+	path = meticulous/tests
+	url = git@github.com:AshwinParanjape/meticulous-tests.git
