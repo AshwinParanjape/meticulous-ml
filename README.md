@@ -15,29 +15,61 @@ When an experiment is run using Meticulous, it
 Simplest way is to use pip
 
 ```bash 
-pip install meticulous
-```
-
-To install from source, clone the repository and in the `meticulous` directory run
-
-```bash 
-python setup.py install
+pip install git+https://github.com/myuser/foo.git
 ```
 
 ## Integration
 To integrate with your code, follow these steps
-1. Meticulous uses argparse to capture the input arguments. If your program doesn't use argparse, the first step would be to capture all arguments using argparse. 
-2. Meticulous uses git to keep track of code state. If you aren't already using git, create a new local repository and commit your code to it
-3. In your entrypoint to the program, add the following import `from meticulous import Experiment` and after arguments have been parsed, create an experiment object using `experiment = Experiment(parser)`
+1. Meticulous uses git to keep track of code state. If you aren't already using git, create a new local repository and commit your code to it
+Here's example code if you are using argparse 
+```diff
++ from meticulous import Experiment 
 
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--batch-size', type=int, default=64, metavar='N',
+                        help='input batch size for training (default: 64)')
+  ...
 
-That's all that is required for all of the basic functionality (code and argument tracking, output redirection and saving in a new folder)
++ # Adds the "meticulous" argument group to your script
++ Experiment.add_argument_group(parser)
 
-Advanced usage -
-* If you want to expose meticulous specific arguments, use `add_argument_group` staticmethod. This would add a an argument group with meticulous specific arguments. 
-* You can also use `ArgumentParser` object (perhaps in conjunction with `add_argument_group`) using the classmethod `from_parser` which reads in the required arguments and creates and experiment object. 
-* `experiment.open` - Override the default function with `open = experiment.open` to read and write files from the experiment directory. This is useful to save model files for instance
-* `experiment.summary()` - Takes a dictionary object and writes it to summary.json
++ # Creates experiment object using original experiment args and "meticulous" args
++ experiment = Experiment.from_parser(parser)
+  args = parser.parse_args()
+  ...
+ 
++ # Overwrites summary.json in experiment directory
++ experiment.summary({'loss': loss, 'accuracy': accuracy})  
+  
++ # Writes model file to the experiment directory
+- with open('model.pkl', 'wb') as f:
++ with experiment.open('model.pkl', 'wb') as f:
+    pkl.dump(weights, f)
+  ...
+```
+
+The "meticulous" argparse group provides following options to customise behaviour
+```
+meticulous:
+  arguments for initializing Experiment object
+
+  --project-directory PROJECT_DIRECTORY
+                        Project directory. Need not be the same as repo
+                        directory, but should be part of a git repo
+  --experiments-directory EXPERIMENTS_DIRECTORY
+                        A directory to store experiments, should be in the
+                        project directory
+  --experiment-id EXPERIMENT_ID
+                        explicitly specified experiment id
+  --description DESCRIPTION
+                        A description for this experiment
+  --resume              Resumes an existing experiment with same arguments and
+                        git sha. If no such experiment is found, starts a new
+                        one
+  --norecord            Override meticulous recording of the experiment. Does
+                        not enforce that the repo be clean and can be used
+                        during development and debugging of experiment
+```
 
 # Design
 
