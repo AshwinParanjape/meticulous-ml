@@ -179,7 +179,7 @@ class Experiment(object):
                 summary = json.load(f)
         except FileNotFoundError:
             summary = {}
-        summary.update(dict)
+        summary.update(summary_dict)
         with self.open('summary.json', 'w') as f:
             json.dump(summary, f, indent=4)
 
