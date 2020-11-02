@@ -39,10 +39,14 @@ class Tee(object):
         self.stdstream = stdstream
         stdstream = self
 
-    def __del__(self):
+    def close(self):
         """Close the file and set the stdstream back to the original stdstream"""
         stdstream = self.stdstream
         self.file.close()
+
+    def __del__(self):
+        """Close the file and set the stdstream back to the original stdstream"""
+        self.close()
 
     def write(self, data):
         """Write to both the output streams and flush"""
