@@ -143,7 +143,7 @@ class Experiment(object):
                            help='Override meticulous recording of the experiment. Does not enforce that the repo be clean and can be used during development and debugging of experiment')
 
     @classmethod
-    def from_parser(cls, parser, **meticulous_args):
+    def from_parser(cls, parser, arg_list = sys.argv[1:], **default_meticulous_args):
         """
         Extract meticulous specific arguments from argparse parser and return an Experiment object
         Args:
@@ -153,9 +153,9 @@ class Experiment(object):
         Returns:
             Experiment object
         """
-        args = parser.parse_args()
+        args = parser.parse_args(arg_list)
         args = vars(args)
-        meticulous_args = {}
+        meticulous_args = default_meticulous_args
         for arg in ['project_directory', 'experiments_directory', 'experiment_id', 'description', 'resume', 'norecord']:
             if arg in args:
                 meticulous_args[arg] = args[arg]
