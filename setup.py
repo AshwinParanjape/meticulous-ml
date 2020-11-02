@@ -19,15 +19,11 @@ setuptools.setup(
         ],
         install_requires=[
             "gitpython",
-            "tabulate",
-            "pandasql",
             "pandas"
         ],
         tests_require=[
-            'torch',
-            'torchvision',
-            'nose'
+            'pytest'
         ],
-        test_suite='nose.collector',
+        test_suite='pytest',
         scripts=['bin/meticulous'],
         )
