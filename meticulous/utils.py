@@ -53,3 +53,6 @@ class Tee(object):
     def flush(self):
         """Flush only the file object"""
         self.file.flush()
+
+    def getvalue(self):
+        return self.stdstream.getvalue()
