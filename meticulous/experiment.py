@@ -83,15 +83,15 @@ class Experiment(object):
                         fmetadata = json.load(mf)
                         #print(exp, fargs, vars(args), fmetadata, self.metadata)
                         if  fargs == args and fmetadata['githead-sha'] == self.metadata['githead-sha']:
-                            logger.info(f"Resuming existing experiment from {exp}")
+                            logger.info("Resuming existing experiment from {exp}".format(exp=exp))
                             self.curexpdir = exp
                             break
             else:
-                logger.info(f"Could not find existing experiment")
+                logger.info("Could not find existing experiment")
 
         if experiment_id:
             self.curexpdir = os.path.join(self.experiments_directory, experiment_id)
-            logger.info(f"Using provided experiment_id {self.curexpdir}")
+            logger.info("Using provided experiment_id {curexpdir}".format(curexpdir=self.curexpdir))
 
         # self.curexpdir contains experiment dir if resume was requested and was possible
         if self.curexpdir is None:
@@ -100,7 +100,7 @@ class Experiment(object):
 
             # Add one to the largest experiment number
             self.curexpdir = os.path.join(self.experiments_directory, str(max(existing_exp+[0,])+1))
-            logger.info(f"New experiment at {self.curexpdir}")
+            logger.info("New experiment at {curexpdir}".format(curexpdir=self.curexpdir))
 
         if not os.path.isdir(self.curexpdir):
             os.mkdir(self.curexpdir)
@@ -193,7 +193,7 @@ class Experiment(object):
     def _set_repo_directory(self):
         """Finds a git repo by searching the project and its parent directories and sets self.repo_directory"""
         self.repo = Repo(self.project_directory, search_parent_directories=True)
-        logger.debug(f"Found git repo at {self.repo}")
+        logger.debug("Found git repo at {repo}".format(repo=self.repo))
 
         # Absolute path of the repo
         self.repo_directory = self.repo.working_dir
@@ -237,7 +237,7 @@ class Experiment(object):
         def exit_hook():
             with self.open('STATUS', 'w') as f:
                 if self.hooks.exited:
-                    f.write(f"ERROR\nsys.exit({self.hooks.exit_code})" )
+                    f.write("ERROR\nsys.exit({code})".format(code=self.hooks.exit_code))
                 elif self.hooks.raised_exception:
                     traceback.print_exception(self.hooks.exc_info['exc_type'],
                                               self.hooks.exc_info['exc_value'],

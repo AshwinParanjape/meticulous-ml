@@ -109,7 +109,7 @@ class Experiments(object):
                 experimentReader = self.reader(exp)
                 experiments.append(experimentReader)
             except Exception as e:
-                print(f"Unable to read {exp}", file=sys.stderr)
+                print("Unable to read {exp}".format(exp=exp), file=sys.stderr)
                 traceback.print_exc(file=sys.stderr)
 
         self.experiments = {e.expid: e for e in sorted(experiments, key = lambda expReader: expReader.begin_time)}
