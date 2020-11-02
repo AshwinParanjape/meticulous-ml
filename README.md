@@ -20,8 +20,9 @@ pip install git+https://github.com/myuser/foo.git
 
 ## Integration
 To integrate with your code, follow these steps
-1. Meticulous uses git to keep track of code state. If you aren't already using git, create a new local repository and commit your code to it
-Here's example code if you are using argparse 
+Meticulous uses git to keep track of code state. If you aren't already using git, create a new local repository and commit your code to it.
+
+Here are modifications to an example code (assumes you are using argparse)
 ```diff
 + from meticulous import Experiment 
 
