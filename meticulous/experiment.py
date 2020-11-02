@@ -96,7 +96,7 @@ class Experiment(object):
         # self.curexpdir contains experiment dir if resume was requested and was possible
         if self.curexpdir is None:
             # Get existing experiments (the assumption is that they are integers
-            existing_exp = [int(d.split('/')[-2]) for d in glob(self.experiments_directory+'/*/')]
+            existing_exp = [int(os.sep.split(d)[-2]) for d in glob(self.experiments_directory+'/*/')]
 
             # Add one to the largest experiment number
             self.curexpdir = os.path.join(self.experiments_directory, str(max(existing_exp+[0,])+1))
