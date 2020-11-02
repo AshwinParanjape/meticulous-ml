@@ -1,4 +1,5 @@
 # Meticulous
+![tests](https://github.com/AshwinParanjape/meticulous/workflows/tests/badge.svg)
 
 Machine learning research involves iterating over ideas and running multiple experiments. And it is important to make a note of the exact setup for research and reproducibility. Meticulous is a python library that makes it easy to record the exact setup of an experiment.
 
