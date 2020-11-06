@@ -1,4 +1,4 @@
-name: meticulous-tests
+name: tests
 
 on: [push]
 
