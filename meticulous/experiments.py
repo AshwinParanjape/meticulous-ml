@@ -23,7 +23,7 @@ class ExperimentReader(object):
             curexpdir: The experiment directory to read
         """
         self.curexpdir = curexpdir
-        self.expid = os.sep.split(self.curexpdir)[-2]
+        self.expid = self.curexpdir.split(os.sep)[-2]
 
         # Load metadata
         try:
