@@ -10,6 +10,7 @@ pd.set_option('display.max_rows', None)
 
 pd.set_option('precision', 4)
 parser = argparse.ArgumentParser()
+parser.add_argument('directory', action="store", help='Directory with stored experiments')
 parser.add_argument("--args", type=str, choices=['none', 'truncated', 'non-default', 'all'], default='none',
                     help='Display args; \n'
                          'none        - don\'t display args,\n'
@@ -19,7 +20,7 @@ parser.add_argument("--args", type=str, choices=['none', 'truncated', 'non-defau
 
 parser.add_argument("--summary", action='store_true')
 args = parser.parse_args()
-exps = Experiments()
+exps = Experiments(expdir=args.directory)
 df = exps.as_dataframe()
 display_df = df[['']]
 dfs = [display_df]
