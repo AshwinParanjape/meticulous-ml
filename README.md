@@ -20,7 +20,7 @@ When an experiment folder is read in Python using Meticulous,
 
 Also provided is a handy command-line script (also called `meticulous`) that provides a quick look at the contents of an experiment folder.
 
-# Usage
+# Getting started
 ## Installation
 Simplest way is to use pip
 
@@ -28,12 +28,98 @@ Simplest way is to use pip
 pip install git+https://github.com/ashwinparanjape/meticulous-ml.git
 ```
 
-## Integration
+## Suggest usage
 To integrate with your code, follow these steps
 Meticulous uses git to keep track of code state. If you aren't already using git, create a new local repository and commit your code to it.
 
-Here are modifications to an example code (assumes you are using argparse)
-```diff
+First import `Experiment` class
+```python
+from meticulous import Experiment 
+```
+
+Then let's say you are using argparse and have a parser that takes in some arguments
+```python
+parser = argparse.ArgumentParser()
+parser.add_argument('--batch-size', type=int, default=64, metavar='N',
+                        help='input batch size for training (default: 64)')
+...
+```
+
+You can add meticulous args as an argument group using the `add_argument_group` staticmethod as follows
+```python
+Experiment.add_argument_group(parser)
+```
+The "meticulous" argparse group provides following options to customise behaviour
+```
+meticulous:
+  arguments for initializing Experiment object
+
+  --project-directory PROJECT_DIRECTORY
+                        Project directory. Need not be the same as repo
+                        directory, but should be part of a git repo
+  --experiments-directory EXPERIMENTS_DIRECTORY
+                        A directory to store experiments, should be in the
+                        project directory
+  --experiment-id EXPERIMENT_ID
+                        explicitly specified experiment id
+  --description DESCRIPTION
+                        A description for this experiment
+  --resume              Resumes an existing experiment with same arguments and
+                        git sha. If no such experiment is found, starts a new
+                        one
+  --norecord            Override meticulous recording of the experiment. Does
+                        not enforce that the repo be clean and can be used
+                        during development and debugging of experiment
+```
+
+Then create an object using the `from_parser` classmethod, which extracts meticulous args separately from the other args. After that you can extract the non-meticulous args as usual.
+```
+experiment = Experiment.from_parser(parser)
+args = parser.parse_args()
+```
+
+This will create a directory structure in your project directory as follows
+```
+experiments/
+└── 1
+    ├── STATUS
+    ├── args.json
+    ├── default_args.json
+    ├── metadata.json
+    ├── stderr
+    └── stdout
+```
+* `args.json` contains the args inferred by the argparse.Parser object
+* `default_args.json` contains the default args as encoded in the argparse.Parser object
+* `metadata.json` looks like the following
+```json
+{
+    "githead-sha": "970d8ad001f5d42a9ecaa5e3791765d65e02292a",
+    "githead-message": "Explicitly close stdout and stderr\n",
+    "description": "",
+    "timestamp": "2020-11-02T12:48:36.150350",
+    "command": [
+        "training_utils.py"
+    ]
+}
+```
+* `STATUS` file is either `RUNNING`, `SUCCESS`, `ERROR` or the python traceback.
+* `stdout` and `stderr` files contain the two output streams. 
+
+You can use the `experiment` object to open files in the current experiment's directory. For e.g. 
+```python
+with experiment.open('model.pkl', 'wb') as f:
+    pkl.dump(weights, f)
+...
+```
+
+You can also store a summary of the experiment so far. This is a json file that gets overwritten everytime `summary` is called. This file has a special meaning because it is read and shown by the meticulous reader. 
+```python
+experiment.summary({'loss': loss, 'accuracy': accuracy})
+```
+
+Here are all the above modifications to an example script (assumes you are using argparse)
+```patch
 + from meticulous import Experiment 
 
   parser = argparse.ArgumentParser()
@@ -59,57 +145,8 @@ Here are modifications to an example code (assumes you are using argparse)
   ...
 ```
 
-The "meticulous" argparse group provides following options to customise behaviour
-```
-meticulous:
-  arguments for initializing Experiment object
-
-  --project-directory PROJECT_DIRECTORY
-                        Project directory. Need not be the same as repo
-                        directory, but should be part of a git repo
-  --experiments-directory EXPERIMENTS_DIRECTORY
-                        A directory to store experiments, should be in the
-                        project directory
-  --experiment-id EXPERIMENT_ID
-                        explicitly specified experiment id
-  --description DESCRIPTION
-                        A description for this experiment
-  --resume              Resumes an existing experiment with same arguments and
-                        git sha. If no such experiment is found, starts a new
-                        one
-  --norecord            Override meticulous recording of the experiment. Does
-                        not enforce that the repo be clean and can be used
-                        during development and debugging of experiment
-```
-
-This will create a directory structure in your project directory as follows
-```
-experiments/
-└── 1
-    ├── STATUS
-    ├── args.json
-    ├── default_args.json
-    ├── metadata.json
-    ├── stderr
-    └── stdout
-```
+## Overriding defaults
 You can provide your own `experiments-directory` and `experiment-id` to override the defaults. 
-* `args.json` contains the args inferred by the argparse.Parser object
-* `default_args.json` contains the default args as encoded in the argparse.Parser object
-* `metadata.json` looks like the following
-```json
-{
-    "githead-sha": "970d8ad001f5d42a9ecaa5e3791765d65e02292a",
-    "githead-message": "Explicitly close stdout and stderr\n",
-    "description": "",
-    "timestamp": "2020-11-02T12:48:36.150350",
-    "command": [
-        "training_utils.py"
-    ]
-}
-```
-* `STATUS` file is either `RUNNING`, `SUCCESS`, `ERROR` or the python traceback.
-* `stdout` and `stderr` files contain the two output streams. 
 
 # Design
 
