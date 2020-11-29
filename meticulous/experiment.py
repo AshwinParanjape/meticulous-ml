@@ -141,6 +141,26 @@ class Experiment(object):
                            help='Resumes an existing experiment with same arguments and git sha. If no such experiment is found, starts a new one')
         group.add_argument('--norecord', action="store_true",
                            help='Override meticulous recording of the experiment. Does not enforce that the repo be clean and can be used during development and debugging of experiment')
+    @classmethod
+    def extract_meticulous_args(cls, parser, arg_list = sys.argv[1:]):
+        """
+        Extract meticulous specific arguments from argparse parser and return them as a dictionary
+        Args:
+            parser: An argparse.ArgumentParser object
+            arg_list: argument list provided to the program
+
+        Returns:
+            Dictionary of meticulous specific arguments
+
+        """
+        args = parser.parse_args(arg_list)
+        meticulous_args = {}
+        args = vars(args)
+        for arg in ['project_directory', 'experiments_directory', 'experiment_id', 'description', 'resume', 'norecord']:
+            if arg in args:
+                meticulous_args[arg] = args[arg]
+        return meticulous_args
+
 
     @classmethod
     def from_parser(cls, parser, arg_list = sys.argv[1:], **default_meticulous_args):
