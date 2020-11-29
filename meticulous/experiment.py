@@ -73,39 +73,46 @@ class Experiment(object):
 
         self.curexpdir = None
 
-        # Asked to resume, check if we can resume given the git-sha and program arguments
-        if resume:
-            #Find the lastest existing experiment with the same git head and args
-            for exp in glob(self.experiments_directory+'/*/'):
-                with open(os.path.join(exp, 'args.json'), 'r') as af:
-                    with open(os.path.join(exp, 'metadata.json'), 'r') as mf:
-                        fargs = json.load(af)
-                        fmetadata = json.load(mf)
-                        #print(exp, fargs, vars(args), fmetadata, self.metadata)
-                        if  fargs == args and fmetadata['githead-sha'] == self.metadata['githead-sha']:
-                            logger.info("Resuming existing experiment from {exp}".format(exp=exp))
-                            self.curexpdir = exp
-                            break
-            else:
-                logger.info("Could not find existing experiment")
-
         if experiment_id:
             self.curexpdir = os.path.join(self.experiments_directory, experiment_id)
-            logger.info("Using provided experiment_id {curexpdir}".format(curexpdir=self.curexpdir))
+            logger.info("Using provided experiment_id: {curexpdir}".format(curexpdir=self.curexpdir))
 
-        # self.curexpdir contains experiment dir if resume was requested and was possible
-        if self.curexpdir is None:
-            # Get existing experiments (the assumption is that they are integers
-            existing_exp = [int(d.split(os.sep)[-2]) for d in glob(self.experiments_directory+'/*/')]
+            if os.path.isdir(self.curexpdir):
+                logger.info("Found existing folder with experiment_id: {curexpdir}, attempting to resume.".format(curexpdir=self.curexpdir))
+                # The experiment already exists, check if we can resume given the git-sha and program arguments
+                with open(os.path.join(self.curexpdir, 'args.json'), 'r') as af:
+                    with open(os.path.join(self.curexpdir, 'metadata.json'), 'r') as mf:
+                        existing_experiment_args = json.load(af)
+                        existing_experiment_fmetadata = json.load(mf)
+
+                        if existing_experiment_args != args:
+                            raise MismatchedArgsException("Provided args do not match stored args for the existing experiment,"
+                                                          " please specify the correct experiment id or create a new experiment")
+
+                        elif existing_experiment_fmetadata['githead-sha'] == self.metadata['githead-sha']:
+                            raise MismatchedCommitException("Current githead sha does not match the githead-sha of the existing experiment,"
+                                                            " please specify the correct experiment id or create a new experiment")
+                        else:
+                            logger.info("Args and githead-sha matches, resuming experiment")
+            else:
+                os.mkdir(self.curexpdir)
+
+        else:
+            # Get existing experiments
+            existing_exp = [d.split(os.sep)[-2] for d in glob(self.experiments_directory+'/*/')]
+
+            # Only consider integer experiment ids
+            existing_int_exp = []
+            for e in existing_exp:
+                try:
+                    existing_int_exp.append(int(e))
+                except ValueError:
+                    continue
 
             # Add one to the largest experiment number
-            self.curexpdir = os.path.join(self.experiments_directory, str(max(existing_exp+[0,])+1))
-            logger.info("New experiment at {curexpdir}".format(curexpdir=self.curexpdir))
-
-        if not os.path.isdir(self.curexpdir):
+            self.curexpdir = os.path.join(self.experiments_directory, str(max(existing_int_exp+[0,])+1))
             os.mkdir(self.curexpdir)
-        else:
-            print("Experiment directory exists! reusing it")
+            logger.info("New experiment at {curexpdir}".format(curexpdir=self.curexpdir))
 
         #Write experiment info
         with self.open('args.json', 'w') as f:
