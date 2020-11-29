@@ -102,9 +102,14 @@ class Experiment(object):
                             raise MismatchedArgsException("Provided args do not match stored args for the existing experiment,"
                                                           " please specify the correct experiment id or create a new experiment")
 
-                        elif existing_experiment_fmetadata['githead-sha'] == self.metadata['githead-sha']:
-                            raise MismatchedCommitException("Current githead sha does not match the githead-sha of the existing experiment,"
-                                                            " please specify the correct experiment id or create a new experiment")
+                        elif existing_experiment_fmetadata['githead-sha'] != self.metadata['githead-sha']:
+                            raise MismatchedCommitException(
+                                "Current githead sha ({current_githead_sha}) does not match the githead-sha of "
+                                "the existing experiment ({old_githead_sha}), "
+                                "please specify the correct experiment id or create a new experiment" \
+                                    .format(current_githead_sha=self.metadata['githead-sha'],
+                                            old_githead_sha=existing_experiment_fmetadata['githead-sha']),
+                            )
                         else:
                             logger.info("Args and githead-sha matches, resuming experiment")
             else:
