@@ -126,21 +126,36 @@ class Experiment(object):
         self._set_status_file()
 
     @staticmethod
-    def add_argument_group(parser):
-        """Add the meticulous arguments to argparse as a separate group"""
+    def add_argument_group(parser, project_directory ='', experiments_directory='experiments', experiment_id=None,
+                           description='', norecord=False):
+        """Add the meticulous arguments to argparse as a separate group
+
+        Args:
+            parser: An argparse.ArgumentParser object
+            project_directory: default for --project-directory argument
+            experiments_directory: default for --experiments-directory argument
+            experiment-id: default for --experiment-id argument
+            description: default for --description argument
+            norecord: default for --norecord argument
+        """
 
         group = parser.add_argument_group('meticulous', 'arguments for initializing Experiment object')
-        group.add_argument('--project-directory', action="store", default='',
-                           help='Project directory. Need not be the same as repo directory, but should be part of a git repo')
-        group.add_argument('--experiments-directory', action="store", default='experiments',
-                           help='A directory to store experiments, should be in the project directory')
-        group.add_argument('--experiment-id', action="store", default=None,
-                           help='explicitly specified experiment id')
-        group.add_argument('--description', action="store", default='', help='A description for this experiment')
-        group.add_argument('--resume', action="store_true",
-                           help='Resumes an existing experiment with same arguments and git sha. If no such experiment is found, starts a new one')
-        group.add_argument('--norecord', action="store_true",
-                           help='Override meticulous recording of the experiment. Does not enforce that the repo be clean and can be used during development and debugging of experiment')
+        group.add_argument('--project-directory', action="store", default=project_directory,
+                           help='Path to the project directory, should be part of a git repo')
+        group.add_argument('--experiments-directory', action="store", default=experiments_directory,
+                           help='Path to the directory that stores experiments. '
+                                'If a relative path is specified then it is relative to the project directory. ')
+        group.add_argument('--experiment-id', action="store", default=experiment_id,
+                           help='Explicitly specified experiment id used for naming experiment folder. '
+                                'If the folder exists (i.e. experiment was run previously), then,'
+                                '   checks for matching args and githead-sha before resuming, '
+                                'otherwise, creates a new experiment folder')
+        group.add_argument('--description', action="store", default=description, help='A text description for this experiment')
+        group.add_argument('--norecord', action="store_true", default=norecord,
+                           help='Disable experiment tracking. '
+                                'Repo can be dirty and no new experiment folders are created. '
+                                'Useful during development and debugging')
+
     @classmethod
     def extract_meticulous_args(cls, parser, arg_list = sys.argv[1:]):
         """
