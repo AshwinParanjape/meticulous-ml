@@ -82,29 +82,31 @@ class ExperimentReader(object):
 
 class Experiments(object):
     """Class to load an experiments folder"""
-    def __init__(self, basedir = '', expdir = None, reader = ExperimentReader):
+    def __init__(self, project_directory = '', experiments_directory = None, reader = ExperimentReader):
         """
-        Load the repo from basedir and experiments from expdir using ExperimentReader class
+        Load the repo from project_directory and experiments from expdir using ExperimentReader class
 
         Args:
-            basedir: Directory which is part of the repo
-            expdir: Absolute path to the experiments directory
+            project_directory (str): Path to the project directory, should be part of a git repo
+            experiments_directory (str): Path to the directory that stores experiments.
+                If a relative path is specified then it is relative to the project directory.
+                Created if it doesn't exist
             reader: To allow overriding with a user defined version of ExperimentReader class
         """
-        self.basedir = basedir
-        self.repo = Repo(self.basedir, search_parent_directories=True)
+        self.project_directory = project_directory
+        self.repo = Repo(self.project_directory, search_parent_directories=True)
         self.repodir = self.repo.working_dir
-        if expdir:
-            self.expdir = expdir
+        if experiments_directory:
+            self.experiments_directory = experiments_directory
         else:
-            self.expdir = os.path.join(self.basedir, 'experiments')
+            self.experiments_directory = os.path.join(self.project_directory, 'experiments')
         self.reader = reader
         self.refresh_experiments()
 
     def refresh_experiments(self):
         """Read experiments from the file system"""
         experiments = []
-        for exp in glob(self.expdir+'/*/'):
+        for exp in glob(self.experiments_directory+'/*/'):
             try:
                 experimentReader = self.reader(exp)
                 experiments.append(experimentReader)
