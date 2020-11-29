@@ -18,34 +18,47 @@ logger.addHandler(ch)
 class DirtyRepoException(Exception):
     """Raised when the repo is dirty"""
     pass
+
+class MismatchedArgsException(Exception):
+    """Raised when attempting to resume an experiment with different argument values"""
+    pass
+
+class MismatchedCommitException(Exception):
+    """Raised when attempting to resume an experiment with different git commit"""
+    pass
 class Experiment(object):
     """Class to keep track and store an experiment's configurations, the code version (via git) and the summary results"""
 
-    def __init__(self, args, default_args={}, project_directory ='', experiments_directory ='experiments', experiment_id=None, description ='', resume = False, norecord = False ):
+    def __init__(self, args, default_args={}, project_directory ='', experiments_directory ='experiments',
+                 experiment_id=None, description ='', norecord = False ):
         """Setup the experiment configuration
 
         1. Find a git repo by looking at the project and its parent directories
         2. Throws an error if the repo is dirty (has uncommitted tracked files)
         3. Creates the experiments directory if it doesn't exist
         4. Extracts metadata from the git repo
-        5. If resume=True, tries to find an experiment that exactly matches the arguments and the git sha.
-            If it finds one, sets that as the current experiment directory.
-            So the program can then resume by using any intermediate saved state
-        6. If experiment_id is provided sets that as the current experiment
-            reusing the existing experiment directory if it exists
+        5. If experiment_id is provided sets that as the current experiment
+            If such an experiment exists, then checks if it exactly matches the arguments and the git sha.
+            If not, throws an error.
+            Otherwise, it resumes that experiment by setting it as the current experiment
 
-        7. Saves experiment info
-        8. Redirects stdout and stderr to the experiment directory
-        9. Creates the STATUS file inside experiment directory
+        6. Saves experiment info
+        7. Redirects stdout and stderr to the experiment directory
+        8. Creates the STATUS file inside experiment directory
 
         Args:
             args (dict): Arguments to the program
-            default_args (dict): Default values of the arguments. If supplied helps display experiments using differentiating arguments
-            project_directory (str): The directory containing the project. It should have a git repo.
-            experiments_directory (str): The directory containing experiments (is expected to be inside project_directory). Created if it doesn't exist
-            experiment_id:
+            default_args (dict): Default values of the arguments.
+                If supplied helps display experiments using differentiating arguments
+            project_directory (str): Path to the project directory, should be part of a git repo
+            experiments_directory (str): Path to the directory that stores experiments.
+                If a relative path is specified then it is relative to the project directory.
+                Created if it doesn't exist
+            experiment_id: Explicitly specified experiment id used for naming experiment folder.
+                If the folder exists (i.e. experiment was run previously), then,
+                    checks for matching args and githead-sha before resuming,
+                otherwise, creates a new experiment folder
             description (str): Descriptor for the experiment
-            resume (str): if True it looks for an existing experiment, with matching gitsha and args to resume
             norecord (str): If true, it skips the entire process and does not record the experiment
         """
 
@@ -58,7 +71,7 @@ class Experiment(object):
 
         #Check if the repo is clean
         if self.repo.is_dirty():
-            raise DirtyRepoException
+            raise DirtyRepoException("There are some tracked but uncommitted files. Please commit them or remove them from git tracking.")
 
         self._set_experiments_directory(experiments_directory)
 
@@ -68,7 +81,7 @@ class Experiment(object):
         self.metadata['githead-sha'] = commit.hexsha
         self.metadata['githead-message'] = commit.message
         self.metadata['description'] = description
-        self.metadata['timestamp'] = datetime.datetime.now().isoformat()
+        self.metadata['start-time'] = datetime.datetime.now().isoformat()
         self.metadata['command'] = sys.argv
 
         self.curexpdir = None
@@ -250,6 +263,7 @@ class Experiment(object):
         """
 
         # Create the expdir if it doesn't exist
+        # joining an absolute experiments_directory path, ignores the project_directory
         self.experiments_directory = os.path.join(self.project_directory, experiments_directory)
         if not os.path.isdir(self.experiments_directory):
             os.mkdir(self.experiments_directory)
@@ -271,16 +285,20 @@ class Experiment(object):
     def _set_status_file(self):
         """
         Set exit hook which writes SUCCESS upon successful termination of the experiment to STATUS file.
-        If the experiment terminated with an error, it writes the error message.
+        If the experiment terminated with an ERROR, it also records the error code or traceback.
         While the experiment is running the STATUS file contains RUNNING
         """
         self.hooks = ExitHooks()
         self.hooks.hook()
         def exit_hook():
+            self.metadata['end-time'] = datetime.datetime.now().isoformat()
+            with self.open('metadata.json', 'w') as f:
+                json.dump(self.metadata, f, indent=4)
             with self.open('STATUS', 'w') as f:
                 if self.hooks.exited:
                     f.write("ERROR\nsys.exit({code})".format(code=self.hooks.exit_code))
                 elif self.hooks.raised_exception:
+                    f.write("ERROR\n")
                     traceback.print_exception(self.hooks.exc_info['exc_type'],
                                               self.hooks.exc_info['exc_value'],
                                               self.hooks.exc_info['exc_traceback'],
