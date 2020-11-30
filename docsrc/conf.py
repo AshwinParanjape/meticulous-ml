@@ -84,7 +84,7 @@ html_theme_options = {
     'github_user': 'ashwinparanjape',
     'github_repo': 'meticulous-ml',
     'github_button': False,
-    'github_banner': True,
+    'github_banner': False,
     'font_family': 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     'fixed_sidebar': True,
     'pre_bg': '#f5f6fa',
