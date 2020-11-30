@@ -1,0 +1,10 @@
+<div class="search-box">
+    <div class="search-input-wrap">
+        <form class="search" action="{{ pathto('search') }}" method="get">
+            <input type="text" name="q" id="search-input" class="search-input" tabindex="0" placeholder="Search {{ project }}" aria-label="Search {{ project }}" autocomplete="off" />
+            <label for="search-input" class="search-label"><svg viewBox="0 0 24 24" class="search-icon"><use xlink:href="#svg-search"></use></svg></label>
+            <input type="submit" value="{{ _('Go') }}" />
+        </form>
+    </div>
+    <!--<div id="search-results" class="search-results"></div>-->
+</div>

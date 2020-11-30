@@ -1,0 +1,452 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>meticulous.experiment &#8212; Meticulous  documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/custom.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="svg-link" viewBox="0 0 24 24">
+      <title>Link</title>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+      </svg>
+    </symbol>
+    <symbol id="svg-search" viewBox="0 0 24 24">
+      <title>Search</title>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+        <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </symbol>
+    <symbol id="svg-menu" viewBox="0 0 24 24">
+      <title>Menu</title>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+        <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </symbol>
+    <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+      <title>Expand</title>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </symbol>
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+      <title>Document</title>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+      </svg>
+    </symbol>
+  </svg>
+      <div class="side-bar" role="navigation" aria-label="main navigation">
+<div class="site-header"><a class='site-title lh-tight' href="../../index.html">Meticulous</a>
+    <a href="#" id="menu-button" class="site-button">
+        <svg viewBox="0 0 24 24" class="icon"><use xlink:href="#svg-menu"></use></svg>
+      </a>
+</div>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=ashwinparanjape&repo=meticulous-ml&type=watch&count=true&size=large&v=2"
+    allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+        <nav id='site-nav' class='site-nav' role='navigation' aria-label='Main'><p class="caption"><span class="caption-text">User guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_tracking.html">Advanced recording</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../meticulous.experiment.html">meticulous.experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../meticulous.experiments.html">meticulous.experiments</a></li>
+</ul>
+
+
+        </nav>
+    <footer class="site-footer">
+      &copy;2020, Ashwin Paranjape.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+
+    
+
+    
+    </footer>
+      </div>
+    <div class="main" id="top">
+
+            <div id="main-header" class="main-header">
+                <div class="search-box">
+    <div class="search-input-wrap">
+        <form class="search" action="../../search.html" method="get">
+            <input type="text" name="q" id="search-input" class="search-input" tabindex="0" placeholder="Search Meticulous" aria-label="Search Meticulous" autocomplete="off" />
+            <label for="search-input" class="search-label"><svg viewBox="0 0 24 24" class="search-icon"><use xlink:href="#svg-search"></use></svg></label>
+            <input type="submit" value="Go" />
+        </form>
+    </div>
+    <!--<div id="search-results" class="search-results"></div>-->
+</div>
+            </div>
+
+            <div id="main-content-wrap" class="main-content-wrap">
+                <div id="main-content" class="main-content" role="main">
+                    
+  <h1>Source code for meticulous.experiment</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">json</span><span class="o">,</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">glob</span> <span class="k">import</span> <span class="n">glob</span>
+<span class="kn">from</span> <span class="nn">git</span> <span class="k">import</span> <span class="n">Repo</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Dict</span>
+
+<span class="kn">from</span> <span class="nn">meticulous.utils</span> <span class="k">import</span> <span class="n">Tee</span><span class="p">,</span> <span class="n">ExitHooks</span>
+<span class="kn">import</span> <span class="nn">atexit</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;meticulous&#39;</span><span class="p">)</span>
+
+<span class="n">ch</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
+<span class="n">ch</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+<span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(name)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">ch</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DirtyRepoException"><a class="viewcode-back" href="../../meticulous.experiment.html#meticulous.experiment.DirtyRepoException">[docs]</a><span class="k">class</span> <span class="nc">DirtyRepoException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raised when the repo is dirty&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="MismatchedArgsException"><a class="viewcode-back" href="../../meticulous.experiment.html#meticulous.experiment.MismatchedArgsException">[docs]</a><span class="k">class</span> <span class="nc">MismatchedArgsException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raised when attempting to resume an experiment with different argument values&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="MismatchedCommitException"><a class="viewcode-back" href="../../meticulous.experiment.html#meticulous.experiment.MismatchedCommitException">[docs]</a><span class="k">class</span> <span class="nc">MismatchedCommitException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raised when attempting to resume an experiment with different git commit&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+<div class="viewcode-block" id="Experiment"><a class="viewcode-back" href="../../meticulous.experiment.html#meticulous.experiment.Experiment">[docs]</a><span class="k">class</span> <span class="nc">Experiment</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class to keep track and store an experiment&#39;s configurations, the code version (via git) and the summary results&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Experiment.__init__"><a class="viewcode-back" href="../../meticulous.experiment.html#meticulous.experiment.Experiment.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">default_args</span><span class="o">=</span><span class="p">{},</span> <span class="n">project_directory</span> <span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">experiments_directory</span> <span class="o">=</span><span class="s1">&#39;experiments&#39;</span><span class="p">,</span>
+                 <span class="n">experiment_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span> <span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">norecord</span> <span class="o">=</span> <span class="kc">False</span> <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Setup the experiment configuration</span>
+
+<span class="sd">        1. Find a git repo by looking at the project and its parent directories</span>
+<span class="sd">        2. Throws an error if the repo is dirty (has uncommitted tracked files)</span>
+<span class="sd">        3. Creates the experiments directory if it doesn&#39;t exist</span>
+<span class="sd">        4. Extracts metadata from the git repo</span>
+<span class="sd">        5. If experiment_id is provided sets that as the current experiment</span>
+<span class="sd">            If such an experiment exists, then checks if it exactly matches the arguments and the git sha.</span>
+<span class="sd">            If not, throws an error.</span>
+<span class="sd">            Otherwise, it resumes that experiment by setting it as the current experiment</span>
+
+<span class="sd">        6. Saves experiment info</span>
+<span class="sd">        7. Redirects stdout and stderr to the experiment directory</span>
+<span class="sd">        8. Creates the STATUS file inside experiment directory</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            args (dict): Arguments to the program</span>
+<span class="sd">            default_args (dict): Default values of the arguments.</span>
+<span class="sd">                If supplied helps display experiments using differentiating arguments</span>
+<span class="sd">            project_directory (str): Path to the project directory, should be part of a git repo</span>
+<span class="sd">            experiments_directory (str): Path to the directory that stores experiments.</span>
+<span class="sd">                If a relative path is specified then it is relative to the project directory.</span>
+<span class="sd">                Created if it doesn&#39;t exist</span>
+<span class="sd">            experiment_id: Explicitly specified experiment id used for naming experiment folder.</span>
+<span class="sd">                If the folder exists (i.e. experiment was run previously), then,</span>
+<span class="sd">                    checks for matching args and githead-sha before resuming,</span>
+<span class="sd">                otherwise, creates a new experiment folder</span>
+<span class="sd">            description (str): Descriptor for the experiment</span>
+<span class="sd">            norecord (str): If true, it skips the entire process and does not record the experiment</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">norecord</span> <span class="o">=</span> <span class="n">norecord</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curexpdir</span><span class="o">=</span><span class="s1">&#39;.&#39;</span>
+        <span class="k">if</span> <span class="n">norecord</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">project_directory</span> <span class="o">=</span> <span class="n">project_directory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_repo_directory</span><span class="p">()</span>
+
+        <span class="c1">#Check if the repo is clean</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">repo</span><span class="o">.</span><span class="n">is_dirty</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">DirtyRepoException</span><span class="p">(</span><span class="s2">&quot;There are some tracked but uncommitted files. Please commit them or remove them from git tracking.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_experiments_directory</span><span class="p">(</span><span class="n">experiments_directory</span><span class="p">)</span>
+
+        <span class="c1">#Store metadata about the repo</span>
+        <span class="n">commit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">repo</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;githead-sha&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">commit</span><span class="o">.</span><span class="n">hexsha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;githead-message&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">commit</span><span class="o">.</span><span class="n">message</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;start-time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;command&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">curexpdir</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">experiment_id</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">curexpdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiments_directory</span><span class="p">,</span> <span class="n">experiment_id</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Using provided experiment_id: </span><span class="si">{curexpdir}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">curexpdir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">curexpdir</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">curexpdir</span><span class="p">):</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Found existing folder with experiment_id: </span><span class="si">{curexpdir}</span><span class="s2">, attempting to resume.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">curexpdir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">curexpdir</span><span class="p">))</span>
+                <span class="c1"># The experiment already exists, check if we can resume given the git-sha and program arguments</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">curexpdir</span><span class="p">,</span> <span class="s1">&#39;args.json&#39;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">af</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">curexpdir</span><span class="p">,</span> <span class="s1">&#39;metadata.json&#39;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">mf</span><span class="p">:</span>
+                        <span class="n">existing_experiment_args</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">af</span><span class="p">)</span>
+                        <span class="n">existing_experiment_fmetadata</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">mf</span><span class="p">)</span>
+
+                        <span class="k">if</span> <span class="n">existing_experiment_args</span> <span class="o">!=</span> <span class="n">args</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="n">MismatchedArgsException</span><span class="p">(</span><span class="s2">&quot;Provided args do not match stored args for the existing experiment,&quot;</span>
+                                                          <span class="s2">&quot; please specify the correct experiment id or create a new experiment&quot;</span><span class="p">)</span>
+
+                        <span class="k">elif</span> <span class="n">existing_experiment_fmetadata</span><span class="p">[</span><span class="s1">&#39;githead-sha&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;githead-sha&#39;</span><span class="p">]:</span>
+                            <span class="k">raise</span> <span class="n">MismatchedCommitException</span><span class="p">(</span>
+                                <span class="s2">&quot;Current githead sha (</span><span class="si">{current_githead_sha}</span><span class="s2">) does not match the githead-sha of &quot;</span>
+                                <span class="s2">&quot;the existing experiment (</span><span class="si">{old_githead_sha}</span><span class="s2">), &quot;</span>
+                                <span class="s2">&quot;please specify the correct experiment id or create a new experiment&quot;</span> \
+                                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current_githead_sha</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;githead-sha&#39;</span><span class="p">],</span>
+                                            <span class="n">old_githead_sha</span><span class="o">=</span><span class="n">existing_experiment_fmetadata</span><span class="p">[</span><span class="s1">&#39;githead-sha&#39;</span><span class="p">]),</span>
+                            <span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Args and githead-sha matches, resuming experiment&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">curexpdir</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Get existing experiments</span>
+            <span class="n">existing_exp</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiments_directory</span><span class="o">+</span><span class="s1">&#39;/*/&#39;</span><span class="p">)]</span>
+
+            <span class="c1"># Only consider integer experiment ids</span>
+            <span class="n">existing_int_exp</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">existing_exp</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">existing_int_exp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+            <span class="c1"># Add one to the largest experiment number</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">curexpdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiments_directory</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">existing_int_exp</span><span class="o">+</span><span class="p">[</span><span class="mi">0</span><span class="p">,])</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">curexpdir</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;New experiment at </span><span class="si">{curexpdir}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">curexpdir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">curexpdir</span><span class="p">))</span>
+
+        <span class="c1">#Write experiment info</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;args.json&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;default_args.json&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">default_args</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;metadata.json&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+        <span class="c1"># Tee stdout and stderr to files as well</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">Tee</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;stdout&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stdout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">Tee</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;stderr&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stderr</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_status_file</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Experiment.add_argument_group"><a class="viewcode-back" href="../../meticulous.experiment.html#meticulous.experiment.Experiment.add_argument_group">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">add_argument_group</span><span class="p">(</span><span class="n">parser</span><span class="p">,</span> <span class="n">project_directory</span> <span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">experiments_directory</span><span class="o">=</span><span class="s1">&#39;experiments&#39;</span><span class="p">,</span> <span class="n">experiment_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">description</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">norecord</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add the meticulous arguments to argparse as a separate group</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            parser: An argparse.ArgumentParser object</span>
+<span class="sd">            project_directory: default for --project-directory argument</span>
+<span class="sd">            experiments_directory: default for --experiments-directory argument</span>
+<span class="sd">            experiment-id: default for --experiment-id argument</span>
+<span class="sd">            description: default for --description argument</span>
+<span class="sd">            norecord: default for --norecord argument</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">group</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_argument_group</span><span class="p">(</span><span class="s1">&#39;meticulous&#39;</span><span class="p">,</span> <span class="s1">&#39;arguments for initializing Experiment object&#39;</span><span class="p">)</span>
+        <span class="n">group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--project-directory&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">project_directory</span><span class="p">,</span>
+                           <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Path to the project directory, should be part of a git repo&#39;</span><span class="p">)</span>
+        <span class="n">group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--experiments-directory&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">experiments_directory</span><span class="p">,</span>
+                           <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Path to the directory that stores experiments. &#39;</span>
+                                <span class="s1">&#39;If a relative path is specified then it is relative to the project directory. &#39;</span><span class="p">)</span>
+        <span class="n">group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--experiment-id&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">experiment_id</span><span class="p">,</span>
+                           <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Explicitly specified experiment id used for naming experiment folder. &#39;</span>
+                                <span class="s1">&#39;If the folder exists (i.e. experiment was run previously), then,&#39;</span>
+                                <span class="s1">&#39;   checks for matching args and githead-sha before resuming, &#39;</span>
+                                <span class="s1">&#39;otherwise, creates a new experiment folder&#39;</span><span class="p">)</span>
+        <span class="n">group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--description&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">description</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;A text description for this experiment&#39;</span><span class="p">)</span>
+        <span class="n">group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--norecord&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">norecord</span><span class="p">,</span>
+                           <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Disable experiment tracking. &#39;</span>
+                                <span class="s1">&#39;Repo can be dirty and no new experiment folders are created. &#39;</span>
+                                <span class="s1">&#39;Useful during development and debugging&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Experiment.extract_meticulous_args"><a class="viewcode-back" href="../../meticulous.experiment.html#meticulous.experiment.Experiment.extract_meticulous_args">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">extract_meticulous_args</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">parser</span><span class="p">,</span> <span class="n">arg_list</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract meticulous specific arguments from argparse parser and return them as a dictionary</span>
+<span class="sd">        Args:</span>
+<span class="sd">            parser: An argparse.ArgumentParser object</span>
+<span class="sd">            arg_list: argument list provided to the program</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionary of meticulous specific arguments</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">arg_list</span><span class="p">)</span>
+        <span class="n">meticulous_args</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;project_directory&#39;</span><span class="p">,</span> <span class="s1">&#39;experiments_directory&#39;</span><span class="p">,</span> <span class="s1">&#39;experiment_id&#39;</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;resume&#39;</span><span class="p">,</span> <span class="s1">&#39;norecord&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+                <span class="n">meticulous_args</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">meticulous_args</span></div>
+
+
+<div class="viewcode-block" id="Experiment.from_parser"><a class="viewcode-back" href="../../meticulous.experiment.html#meticulous.experiment.Experiment.from_parser">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_parser</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">parser</span><span class="p">,</span> <span class="n">arg_list</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="o">**</span><span class="n">default_meticulous_args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract meticulous specific arguments from argparse parser and return an Experiment object</span>
+<span class="sd">        Args:</span>
+<span class="sd">            parser: argparse parser</span>
+<span class="sd">            **meticulous_args: any other args for constructing Experiment object that may not be in the parser</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Experiment object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">arg_list</span><span class="p">)</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">meticulous_args</span> <span class="o">=</span> <span class="n">default_meticulous_args</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;project_directory&#39;</span><span class="p">,</span> <span class="s1">&#39;experiments_directory&#39;</span><span class="p">,</span> <span class="s1">&#39;experiment_id&#39;</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;resume&#39;</span><span class="p">,</span> <span class="s1">&#39;norecord&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+                <span class="n">meticulous_args</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span>
+                <span class="k">del</span> <span class="n">args</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span>
+
+        <span class="n">default_args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">([])</span>
+        <span class="n">default_args</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">default_args</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;project_directory&#39;</span><span class="p">,</span> <span class="s1">&#39;experiments_directory&#39;</span><span class="p">,</span> <span class="s1">&#39;experiment_id&#39;</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;resume&#39;</span><span class="p">,</span> <span class="s1">&#39;norecord&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">default_args</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">default_args</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">default_args</span><span class="o">=</span><span class="n">default_args</span><span class="p">,</span> <span class="o">**</span><span class="n">meticulous_args</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Experiment.summary"><a class="viewcode-back" href="../../meticulous.experiment.html#meticulous.experiment.Experiment.summary">[docs]</a>    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">summary_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Takes a dictionary object score and (over)writes it in the experiment directory&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">norecord</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;summary.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">summary</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="n">summary</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">summary</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">summary_dict</span><span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;summary.json&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">summary</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Experiment.open"><a class="viewcode-back" href="../../meticulous.experiment.html#meticulous.experiment.Experiment.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;wrapper around the function open to redirect relative paths to  experiment directory&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">norecord</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isabs</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">else</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">curexpdir</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">path</span><span class="p">,)</span><span class="o">+</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">return</span> <span class="nb">open</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_set_repo_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Finds a git repo by searching the project and its parent directories and sets self.repo_directory&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repo</span> <span class="o">=</span> <span class="n">Repo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project_directory</span><span class="p">,</span> <span class="n">search_parent_directories</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Found git repo at </span><span class="si">{repo}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">repo</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">repo</span><span class="p">))</span>
+
+        <span class="c1"># Absolute path of the repo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repo_directory</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">repo</span><span class="o">.</span><span class="n">working_dir</span>
+
+    <span class="k">def</span> <span class="nf">_set_experiments_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experiments_directory</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates the experiments directory if it doesn&#39;t exit and adds it to .gitignore</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            experiments_directory (str): The directory to store all experiments</span>
+
+<span class="sd">        Returns: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Create the expdir if it doesn&#39;t exist</span>
+        <span class="c1"># joining an absolute experiments_directory path, ignores the project_directory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">experiments_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project_directory</span><span class="p">,</span> <span class="n">experiments_directory</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiments_directory</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiments_directory</span><span class="p">)</span>
+
+        <span class="c1"># ignore the experiment directory from git tree if not ignored yet</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">repo_directory</span><span class="p">,</span> <span class="s1">&#39;.gitignore&#39;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">ignored</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiments_directory</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">repo_directory</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()]</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Creating local .gitignore&quot;</span><span class="p">)</span>
+            <span class="n">ignored</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ignored</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Adding experiments directory to .gitignore&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">repo_directory</span><span class="p">,</span> <span class="s1">&#39;.gitignore&#39;</span><span class="p">),</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiments_directory</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">repo_directory</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">repo</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">add</span><span class="p">([</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">repo_directory</span><span class="p">,</span> <span class="s1">&#39;.gitignore&#39;</span><span class="p">)])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">repo</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="s1">&#39;Added experiments directory to .gitignore&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_set_status_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set exit hook which writes SUCCESS upon successful termination of the experiment to STATUS file.</span>
+<span class="sd">        If the experiment terminated with an ERROR, it also records the error code or traceback.</span>
+<span class="sd">        While the experiment is running the STATUS file contains RUNNING</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hooks</span> <span class="o">=</span> <span class="n">ExitHooks</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hooks</span><span class="o">.</span><span class="n">hook</span><span class="p">()</span>
+        <span class="k">def</span> <span class="nf">exit_hook</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;end-time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;metadata.json&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;STATUS&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hooks</span><span class="o">.</span><span class="n">exited</span><span class="p">:</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;ERROR</span><span class="se">\n</span><span class="s2">sys.exit(</span><span class="si">{code}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hooks</span><span class="o">.</span><span class="n">exit_code</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">hooks</span><span class="o">.</span><span class="n">raised_exception</span><span class="p">:</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;ERROR</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">traceback</span><span class="o">.</span><span class="n">print_exception</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hooks</span><span class="o">.</span><span class="n">exc_info</span><span class="p">[</span><span class="s1">&#39;exc_type&#39;</span><span class="p">],</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">hooks</span><span class="o">.</span><span class="n">exc_info</span><span class="p">[</span><span class="s1">&#39;exc_value&#39;</span><span class="p">],</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">hooks</span><span class="o">.</span><span class="n">exc_info</span><span class="p">[</span><span class="s1">&#39;exc_traceback&#39;</span><span class="p">],</span>
+                                              <span class="n">file</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;SUCCESS&#39;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;STATUS&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;RUNNING&#39;</span><span class="p">)</span>
+        <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">exit_hook</span><span class="p">)</span></div>
+</pre></div>
+
+                </div>
+            </div>
+          
+
+      </div>
+    <div class="clearer"></div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Ashwin Paranjape.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+    </div>
+  </body>
+</html>
