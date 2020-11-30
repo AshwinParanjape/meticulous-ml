@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meticulous script &#8212; Meticulous  documentation</title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/custom.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Programmatic Reading" href="advanced_reading.html" />
+    <link rel="prev" title="Advanced writing options" href="advanced_tracking.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="svg-link" viewBox="0 0 24 24">
+      <title>Link</title>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+      </svg>
+    </symbol>
+    <symbol id="svg-search" viewBox="0 0 24 24">
+      <title>Search</title>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+        <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </symbol>
+    <symbol id="svg-menu" viewBox="0 0 24 24">
+      <title>Menu</title>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+        <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </symbol>
+    <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+      <title>Expand</title>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </symbol>
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+      <title>Document</title>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+      </svg>
+    </symbol>
+  </svg>
+      <div class="side-bar" role="navigation" aria-label="main navigation">
+<div class="site-header"><a class='site-title lh-tight' href="index.html">Meticulous</a>
+    <a href="#" id="menu-button" class="site-button">
+        <svg viewBox="0 0 24 24" class="icon"><use xlink:href="#svg-menu"></use></svg>
+      </a>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        <nav id='site-nav' class='site-nav' role='navigation' aria-label='Main'><p class="caption"><span class="caption-text">User guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_tracking.html">Advanced options</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Listing on commandline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced_reading.html">Programmatic reading</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="meticulous.experiment.html">meticulous.experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="meticulous.experiments.html">meticulous.experiments</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">meticulous script</a></li>
+</ul>
+
+
+        </nav>
+      </div>
+    <div class="main" id="top">
+
+            <div id="main-header" class="main-header">
+                <div class="search-box">
+    <div class="search-input-wrap">
+        <form class="search" action="search.html" method="get">
+            <input type="text" name="q" id="search-input" class="search-input" tabindex="0" placeholder="Search Meticulous" aria-label="Search Meticulous" autocomplete="off" />
+            <label for="search-input" class="search-label"><svg viewBox="0 0 24 24" class="search-icon"><use xlink:href="#svg-search"></use></svg></label>
+            <input type="submit" value="Go" />
+        </form>
+    </div>
+    <!--<div id="search-results" class="search-results"></div>-->
+</div>
+                <nav aria-label="Auxiliary" class="aux-nav">
+                    <ul class="aux-nav-list">
+                        <li class="aux-nav-list-item">
+                            <a href="//github.com/ashwinparanjape/meticulous-ml" class="site-button"> View on GitHub </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div id="main-content-wrap" class="main-content-wrap">
+                <div id="main-content" class="main-content" role="main">
+                    
+  <div class="section" id="meticulous-script">
+<h1>Meticulous script<a class="headerlink" href="#meticulous-script" title="Permalink to this headline">¶</a></h1>
+<p>The script takes few more optional arguments:</p>
+<dl>
+<dt>positional arguments:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">directory</dt>
+<dd class="field-odd"><p>Directory with stored experiments</p>
+</dd>
+</dl>
+</dd>
+<dt>optional arguments:</dt><dd><dl class="option-list">
+<dt><kbd><span class="option">-h</span>, <span class="option">--help</span></kbd></dt>
+<dd><p>show this help message and exit</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>–args {none,truncated,non-default,all}</dt><dd><dl class="simple">
+<dt>Display args:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">none</dt>
+<dd class="field-odd"><p>don’t display args</p>
+</dd>
+<dt class="field-even">truncated</dt>
+<dd class="field-even"><p>removes all values which stay constant across experiments</p>
+</dd>
+<dt class="field-odd">non-default</dt>
+<dd class="field-odd"><p>shows arguments that modify default values</p>
+</dd>
+<dt class="field-even">all</dt>
+<dd class="field-even"><p>all arguments</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="option-list">
+<dt><kbd><span class="option">--summary</span></kbd></dt>
+<dd><p>Show experiment summary</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>Running the script with <code class="docutils literal notranslate"><span class="pre">--args</span> <span class="pre">all</span> <span class="pre">--summary</span></code> produces:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$meticulous experiments/ --args all --summary
+                                                                                                  args                                                                                   summary
+                                 curexpdir           start_time   status status_message batch_size test_batch_size epochs   lr gamma no_cuda dry_run   seed log_interval save_model val_loss
+(, sha)              expid
+64decb56b912b1190... 1      experiments/1/  2020-11-30T00:56...  SUCCESS                        64            1000     14  1.0   0.7   False   False      1           10      False   0.4828
+                     2      experiments/2/  2020-11-30T00:58...  SUCCESS                        64            1000     14  0.1   0.7   False   False      1           10      False   0.4853
+                     3      experiments/3/  2020-11-30T00:58...  SUCCESS                        64            1000     14  1.0   0.7   False   False  98789           10      False   0.3863
+</pre></div>
+</div>
+<p>Running the script with <code class="docutils literal notranslate"><span class="pre">--args</span> <span class="pre">**truncated**</span> <span class="pre">--summary</span></code> removes the args which are common to all experiments and declutters the output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$meticulous experiments/ --args truncated --summary
+                                                                                            args         summary
+                                 curexpdir           start_time   status status_message   lr   seed val_loss
+(, sha)              expid
+64decb56b912b1190... 1      experiments/1/  2020-11-30T00:56...  SUCCESS                 1.0      1   0.4828
+                     2      experiments/2/  2020-11-30T00:58...  SUCCESS                 0.1      1   0.4853
+                     3      experiments/3/  2020-11-30T00:58...  SUCCESS                 1.0  98789   0.3863
+</pre></div>
+</div>
+</div>
+
+
+                </div>
+            </div>
+          
+
+      </div>
+    <div class="clearer"></div>
+    <div class="footer">
+      &copy;2020, Ashwin Paranjape.
+      
+      |
+      Docs powered by <a href="http://sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster</a>
+        &amp; <a href="https://github.com/pmarsceill/just-the-docs">Just the Docs</a> jekyll theme
+      
+      |
+      <a href="_sources/meticulous_cmd.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/ashwinparanjape/meticulous-ml" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

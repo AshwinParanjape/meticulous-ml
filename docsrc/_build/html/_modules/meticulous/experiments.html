@@ -1,0 +1,300 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>meticulous.experiments &#8212; Meticulous  documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/custom.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="svg-link" viewBox="0 0 24 24">
+      <title>Link</title>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+      </svg>
+    </symbol>
+    <symbol id="svg-search" viewBox="0 0 24 24">
+      <title>Search</title>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+        <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </symbol>
+    <symbol id="svg-menu" viewBox="0 0 24 24">
+      <title>Menu</title>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+        <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </symbol>
+    <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+      <title>Expand</title>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </symbol>
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+      <title>Document</title>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+      </svg>
+    </symbol>
+  </svg>
+      <div class="side-bar" role="navigation" aria-label="main navigation">
+<div class="site-header"><a class='site-title lh-tight' href="../../index.html">Meticulous</a>
+    <a href="#" id="menu-button" class="site-button">
+        <svg viewBox="0 0 24 24" class="icon"><use xlink:href="#svg-menu"></use></svg>
+      </a>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        <nav id='site-nav' class='site-nav' role='navigation' aria-label='Main'><p class="caption"><span class="caption-text">User guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_tracking.html">Advanced options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../meticulous_cmd.html">Listing on commandline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_reading.html">Programmatic reading</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../meticulous.experiment.html">meticulous.experiment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../meticulous.experiments.html">meticulous.experiments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../meticulous_cmd.html">meticulous script</a></li>
+</ul>
+
+
+        </nav>
+      </div>
+    <div class="main" id="top">
+
+            <div id="main-header" class="main-header">
+                <div class="search-box">
+    <div class="search-input-wrap">
+        <form class="search" action="../../search.html" method="get">
+            <input type="text" name="q" id="search-input" class="search-input" tabindex="0" placeholder="Search Meticulous" aria-label="Search Meticulous" autocomplete="off" />
+            <label for="search-input" class="search-label"><svg viewBox="0 0 24 24" class="search-icon"><use xlink:href="#svg-search"></use></svg></label>
+            <input type="submit" value="Go" />
+        </form>
+    </div>
+    <!--<div id="search-results" class="search-results"></div>-->
+</div>
+                <nav aria-label="Auxiliary" class="aux-nav">
+                    <ul class="aux-nav-list">
+                        <li class="aux-nav-list-item">
+                            <a href="//github.com/ashwinparanjape/meticulous-ml" class="site-button"> View on GitHub </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div id="main-content-wrap" class="main-content-wrap">
+                <div id="main-content" class="main-content" role="main">
+                    
+  <h1>Source code for meticulous.experiments</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">git</span> <span class="k">import</span> <span class="n">Repo</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">glob</span> <span class="k">import</span> <span class="n">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pandas.io.json</span> <span class="k">import</span> <span class="n">json_normalize</span>
+
+<div class="viewcode-block" id="ExperimentReader"><a class="viewcode-back" href="../../meticulous.experiments.html#meticulous.experiments.ExperimentReader">[docs]</a><span class="k">class</span> <span class="nc">ExperimentReader</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class to read an experiment folder&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ExperimentReader.__init__"><a class="viewcode-back" href="../../meticulous.experiments.html#meticulous.experiments.ExperimentReader.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">curexpdir</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read experiment data from curexpdir. Reads metadata.json, args.json, default_args.json, STATUS and summary.json.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            curexpdir: The experiment directory to read</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curexpdir</span> <span class="o">=</span> <span class="n">curexpdir</span>
+        <span class="sd">&quot;&quot;&quot;str: Path to the directory for the current experiment&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">expid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">curexpdir</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="sd">&quot;&quot;&quot;str: experiment id&quot;&quot;&quot;</span>
+
+        <span class="c1"># Load metadata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="sd">&quot;&quot;&quot;dict: loaded from metadata.json&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;metadata.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="c1"># Extract useful attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;command&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;command&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;githead-sha&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;start-time&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getctime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">curexpdir</span><span class="p">))</span>
+
+        <span class="c1"># Load args</span>
+        <span class="c1">#: dict: loaded from args.json</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;args.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="c1"># Load default args</span>
+        <span class="c1">#: dict: loaded from default_args.json</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default_args</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;default_args.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">default_args</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="c1"># Load status</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="s1">&#39;UNKNOWN&#39;</span> <span class="c1"># First line of STATUS file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_message</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="c1"># Last line of STATUS file (usually contains the Python error)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refresh_status</span><span class="p">()</span>
+
+        <span class="c1"># Load summary</span>
+        <span class="c1">#: dict: loaded from summary.json</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">summary</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refresh_summary</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ExperimentReader.open"><a class="viewcode-back" href="../../meticulous.experiments.html#meticulous.experiments.ExperimentReader.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;wrapper around the function open to redirect to experiment directory&quot;&quot;&quot;</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">curexpdir</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]),)</span><span class="o">+</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">return</span> <span class="nb">open</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ExperimentReader.refresh_status"><a class="viewcode-back" href="../../meticulous.experiments.html#meticulous.experiments.ExperimentReader.refresh_status">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read STATUS file&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;STATUS&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">ls</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">ls</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">status_message</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ls</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">ls</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
+            <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="ExperimentReader.refresh_summary"><a class="viewcode-back" href="../../meticulous.experiments.html#meticulous.experiments.ExperimentReader.refresh_summary">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read summary.json&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;summary.json&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">summary</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">curexpdir</span></div>
+
+<div class="viewcode-block" id="Experiments"><a class="viewcode-back" href="../../meticulous.experiments.html#meticulous.experiments.Experiments">[docs]</a><span class="k">class</span> <span class="nc">Experiments</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class to load an experiments folder&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Experiments.__init__"><a class="viewcode-back" href="../../meticulous.experiments.html#meticulous.experiments.Experiments.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">project_directory</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">experiments_directory</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">ExperimentReader</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load the repo from project_directory and experiments from expdir using ExperimentReader class.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            project_directory: Path to the project directory, should be part of a git repo.</span>
+<span class="sd">            experiments_directory: Path to the directory that stores experiments. If a relative path is specified then it is relative to the project directory. Created if it doesn&#39;t exist.</span>
+<span class="sd">            reader: To allow overriding with a user defined version of ExperimentReader class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">project_directory</span> <span class="o">=</span> <span class="n">project_directory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repo</span> <span class="o">=</span> <span class="n">Repo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project_directory</span><span class="p">,</span> <span class="n">search_parent_directories</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">repodir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">repo</span><span class="o">.</span><span class="n">working_dir</span>
+        <span class="k">if</span> <span class="n">experiments_directory</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">experiments_directory</span> <span class="o">=</span> <span class="n">experiments_directory</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">experiments_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project_directory</span><span class="p">,</span> <span class="s1">&#39;experiments&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reader</span> <span class="o">=</span> <span class="n">reader</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="sd">&quot;&quot;&quot;Dict[ExperimentReader]: experiment ids mapped to respective ExperimentReader objects &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">refresh_experiments</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Experiments.refresh_experiments"><a class="viewcode-back" href="../../meticulous.experiments.html#meticulous.experiments.Experiments.refresh_experiments">[docs]</a>    <span class="k">def</span> <span class="nf">refresh_experiments</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read experiments from the file system&quot;&quot;&quot;</span>
+        <span class="n">experiments</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">exp</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiments_directory</span><span class="o">+</span><span class="s1">&#39;/*/&#39;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">experimentReader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">exp</span><span class="p">)</span>
+                <span class="n">experiments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">experimentReader</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unable to read </span><span class="si">{exp}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exp</span><span class="o">=</span><span class="n">exp</span><span class="p">),</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span> <span class="o">=</span> <span class="p">{</span><span class="n">e</span><span class="o">.</span><span class="n">expid</span><span class="p">:</span> <span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">experiments</span><span class="p">,</span> <span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">expReader</span><span class="p">:</span> <span class="n">expReader</span><span class="o">.</span><span class="n">start_time</span><span class="p">)}</span></div>
+
+
+<div class="viewcode-block" id="Experiments.as_dataframe"><a class="viewcode-back" href="../../meticulous.experiments.html#meticulous.experiments.Experiments.as_dataframe">[docs]</a>    <span class="k">def</span> <span class="nf">as_dataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns all experiment data as a pandas dataframe&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">json_normalize</span><span class="p">([</span><span class="nb">vars</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;expid&#39;</span><span class="p">)</span>
+
+            <span class="c1"># Convert json_normalized columns into multilevel columns for ease of use and nicer printing</span>
+            <span class="n">max_col_levels</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">MultiIndex</span><span class="o">.</span><span class="n">from_tuples</span><span class="p">(</span>
+                <span class="p">[[</span><span class="s1">&#39;&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_col_levels</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">level_vals</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)))</span> <span class="o">+</span> <span class="n">level_vals</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">level_vals</span> <span class="ow">in</span>
+                 <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;Unable to load any experiments&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">experiments</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
+
+
+
+
+
+
+
+
+
+</pre></div>
+
+                </div>
+            </div>
+          
+
+      </div>
+    <div class="clearer"></div>
+    <div class="footer">
+      &copy;2020, Ashwin Paranjape.
+      
+      |
+      Docs powered by <a href="http://sphinx-doc.org/">Sphinx</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster</a>
+        &amp; <a href="https://github.com/pmarsceill/just-the-docs">Just the Docs</a> jekyll theme
+      
+    </div>
+
+    
+    <a href="https://github.com/ashwinparanjape/meticulous-ml" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>
