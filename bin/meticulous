@@ -20,7 +20,7 @@ parser.add_argument("--args", type=str, choices=['none', 'truncated', 'non-defau
 
 parser.add_argument("--summary", action='store_true')
 args = parser.parse_args()
-exps = Experiments(expdir=args.directory)
+exps = Experiments(experiments_directory=args.directory)
 df = exps.as_dataframe()
 display_df = df[['']]
 dfs = [display_df]
