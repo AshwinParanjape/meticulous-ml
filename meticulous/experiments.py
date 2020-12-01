@@ -35,7 +35,7 @@ class ExperimentReader(object):
         # Extract useful attributes
         self.metadata['command'] = ' '.join(self.metadata.get('command', []))
         self.sha = self.metadata.get('githead-sha', None)
-        self.begin_time = self.metadata.get('timestamp', os.path.getctime(self.curexpdir))
+        self.start_time = self.metadata.get('start-time', os.path.getctime(self.curexpdir))
 
         # Load args
         try:
@@ -114,18 +114,22 @@ class Experiments(object):
                 print("Unable to read {exp}".format(exp=exp), file=sys.stderr)
                 traceback.print_exc(file=sys.stderr)
 
-        self.experiments = {e.expid: e for e in sorted(experiments, key = lambda expReader: expReader.begin_time)}
+        self.experiments = {e.expid: e for e in sorted(experiments, key = lambda expReader: expReader.start_time)}
+
 
     def as_dataframe(self):
         """Returns all experiment data as a pandas dataframe"""
-        df = json_normalize([vars(e) for e in self.experiments.values()]).set_index('expid')
+        if len(self.experiments.values()) > 0:
+            df = json_normalize([vars(e) for e in self.experiments.values()]).set_index('expid')
 
-        # Convert json_normalized columns into multilevel columns for ease of use and nicer printing
-        max_col_levels = max(len(c.split('.')) for c in df.columns)
-        df.columns = pd.MultiIndex.from_tuples(
-            [[''] * (max_col_levels - len(level_vals.split('.'))) + level_vals.split('.') for level_vals in
-             df.columns])
-        return df
+            # Convert json_normalized columns into multilevel columns for ease of use and nicer printing
+            max_col_levels = max(len(c.split('.')) for c in df.columns)
+            df.columns = pd.MultiIndex.from_tuples(
+                [[''] * (max_col_levels - len(level_vals.split('.'))) + level_vals.split('.') for level_vals in
+                 df.columns])
+            return df
+        else:
+            raise IndexError("Unable to load any experiments")
 
     def __getitem__(self, key):
         return self.experiments[key]
