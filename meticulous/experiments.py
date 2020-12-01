@@ -10,12 +10,7 @@ from pandas.io.json import json_normalize
 class ExperimentReader(object):
     """Class to read an experiment folder"""
 
-    def open(self, *args, **kwargs):
-        """wrapper around the function open to redirect to experiment directory"""
-        args = (os.path.join(self.curexpdir, args[0]),)+ args[1:]
-        return open(*args, **kwargs)
-
-    def __init__(self, curexpdir):
+    def __init__(self, curexpdir:str):
         """
         Read experiment data from curexpdir. Reads metadata.json, args.json, default_args.json, STATUS and summary.json.
 
@@ -23,14 +18,19 @@ class ExperimentReader(object):
             curexpdir: The experiment directory to read
         """
         self.curexpdir = curexpdir
+        """str: Path to the directory for the current experiment"""
+
         self.expid = self.curexpdir.split(os.sep)[-2]
+        """str: experiment id"""
 
         # Load metadata
+        self.metadata = {}
+        """dict: loaded from metadata.json"""
         try:
             with self.open('metadata.json', 'r') as f:
                 self.metadata = json.load(f)
         except FileNotFoundError as e:
-            self.metadata = {}
+            pass
 
         # Extract useful attributes
         self.metadata['command'] = ' '.join(self.metadata.get('command', []))
@@ -38,25 +38,38 @@ class ExperimentReader(object):
         self.start_time = self.metadata.get('start-time', os.path.getctime(self.curexpdir))
 
         # Load args
+        #: dict: loaded from args.json
+        self.args = {}
         try:
             with self.open('args.json', 'r') as f:
                 self.args = json.load(f)
         except FileNotFoundError as e:
-            self.args = {}
+            pass
 
         # Load default args
+        #: dict: loaded from default_args.json
+        self.default_args = {}
         try:
             with self.open('default_args.json', 'r') as f:
                 self.default_args = json.load(f)
         except FileNotFoundError as e:
-            self.default_args = {}
+            pass
 
         # Load status
+        self.status = 'UNKNOWN' # First line of STATUS file
+        self.status_message = '' # Last line of STATUS file (usually contains the Python error)
         self.refresh_status()
 
         # Load summary
+        #: dict: loaded from summary.json
+        self.summary = {}
         self.refresh_summary()
 
+
+    def open(self, *args, **kwargs):
+        """wrapper around the function open to redirect to experiment directory"""
+        args = (os.path.join(self.curexpdir, args[0]),)+ args[1:]
+        return open(*args, **kwargs)
 
     def refresh_status(self):
         """Read STATUS file"""
@@ -66,8 +79,7 @@ class ExperimentReader(object):
                 self.status = ls[0]
                 self.status_message = '' if len(ls) <= 1 else ls[-1]
         except (FileNotFoundError, IndexError):
-            self.status = 'UNKNOWN'
-            self.status_message = ''
+            pass
 
     def refresh_summary(self):
         """Read summary.json"""
@@ -75,23 +87,21 @@ class ExperimentReader(object):
             with self.open('summary.json', 'r') as f:
                 self.summary = json.load(f)
         except FileNotFoundError:
-            self.summary = {}
+            pass
 
     def __repr__(self):
         return self.curexpdir
 
 class Experiments(object):
     """Class to load an experiments folder"""
-    def __init__(self, project_directory = '', experiments_directory = None, reader = ExperimentReader):
+    def __init__(self, project_directory:str = '', experiments_directory:str = None, reader = ExperimentReader):
         """
-        Load the repo from project_directory and experiments from expdir using ExperimentReader class
+        Load the repo from project_directory and experiments from expdir using ExperimentReader class.
 
         Args:
-            project_directory (str): Path to the project directory, should be part of a git repo
-            experiments_directory (str): Path to the directory that stores experiments.
-                If a relative path is specified then it is relative to the project directory.
-                Created if it doesn't exist
-            reader: To allow overriding with a user defined version of ExperimentReader class
+            project_directory: Path to the project directory, should be part of a git repo.
+            experiments_directory: Path to the directory that stores experiments. If a relative path is specified then it is relative to the project directory. Created if it doesn't exist.
+            reader: To allow overriding with a user defined version of ExperimentReader class.
         """
         self.project_directory = project_directory
         self.repo = Repo(self.project_directory, search_parent_directories=True)
@@ -101,6 +111,8 @@ class Experiments(object):
         else:
             self.experiments_directory = os.path.join(self.project_directory, 'experiments')
         self.reader = reader
+        self.experiments = {}
+        """Dict[ExperimentReader]: experiment ids mapped to respective ExperimentReader objects """
         self.refresh_experiments()
 
     def refresh_experiments(self):
