@@ -14,23 +14,11 @@ ch.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 ch.setFormatter(formatter)
 logger.addHandler(ch)
-
-class DirtyRepoException(Exception):
-    """Raised when the repo is dirty"""
-    pass
-
-class MismatchedArgsException(Exception):
-    """Raised when attempting to resume an experiment with different argument values"""
-    pass
-
-class MismatchedCommitException(Exception):
-    """Raised when attempting to resume an experiment with different git commit"""
-    pass
 class Experiment(object):
     """Class to keep track and store an experiment's configurations, the code version (via git) and the summary results"""
 
-    def __init__(self, args, default_args={}, project_directory ='', experiments_directory ='experiments',
-                 experiment_id=None, description ='', norecord = False ):
+    def __init__(self, args: Dict, default_args:Dict={}, project_directory: str ='', experiments_directory:str ='experiments',
+                 experiment_id=None, description:str ='', norecord:bool = False ):
         """Setup the experiment configuration
 
         1. Find a git repo by looking at the project and its parent directories
@@ -40,7 +28,7 @@ class Experiment(object):
         5. If experiment_id is provided sets that as the current experiment
             If such an experiment exists, then checks if it exactly matches the arguments and the git sha.
             If not, throws an error.
-            Otherwise, it resumes that experiment by setting it as the current experiment
+            Otherwise, it resumes that experiment by setting it as the current experiment.
 
         6. Saves experiment info
         7. Redirects stdout and stderr to the experiment directory
@@ -59,11 +47,12 @@ class Experiment(object):
                     checks for matching args and githead-sha before resuming,
                 otherwise, creates a new experiment folder
             description (str): Descriptor for the experiment
-            norecord (str): If true, it skips the entire process and does not record the experiment
+            norecord (bool): If true, it skips the entire process and does not record the experiment
         """
 
         self.norecord = norecord
-        self.curexpdir='.'
+        self.curexpdir='.' #: Doc comment *inline* with attribute
+        """str: Path to the directory for the current experiment"""
         if norecord:
             return
         self.project_directory = project_directory
@@ -78,6 +67,7 @@ class Experiment(object):
         #Store metadata about the repo
         commit = self.repo.commit()
         self.metadata = {}
+        """dict: Metadata stored to metadata.json"""
         self.metadata['githead-sha'] = commit.hexsha
         self.metadata['githead-message'] = commit.message
         self.metadata['description'] = description
@@ -181,18 +171,21 @@ class Experiment(object):
                                 'Repo can be dirty and no new experiment folders are created. '
                                 'Useful during development and debugging')
 
-    @classmethod
-    def extract_meticulous_args(cls, parser, arg_list = sys.argv[1:]):
+    @staticmethod
+    def extract_meticulous_args(parser, arg_list = None):
         """
         Extract meticulous specific arguments from argparse parser and return them as a dictionary
+
         Args:
             parser: An argparse.ArgumentParser object
-            arg_list: argument list provided to the program
+            arg_list: list of arguments, default is sys.argv[1:]
 
         Returns:
             Dictionary of meticulous specific arguments
 
         """
+        if arg_list is None:
+            arg_list = sys.argv[1:]
         args = parser.parse_args(arg_list)
         meticulous_args = {}
         args = vars(args)
@@ -203,16 +196,20 @@ class Experiment(object):
 
 
     @classmethod
-    def from_parser(cls, parser, arg_list = sys.argv[1:], **default_meticulous_args):
+    def from_parser(cls, parser, arg_list = None, **default_meticulous_args):
         """
         Extract meticulous specific arguments from argparse parser and return an Experiment object
+
         Args:
             parser: argparse parser
+            arg_list: list of arguments, default is sys.argv[1:]
             **meticulous_args: any other args for constructing Experiment object that may not be in the parser
 
         Returns:
             Experiment object
         """
+        if arg_list is None:
+            arg_list = sys.argv[1:]
         args = parser.parse_args(arg_list)
         args = vars(args)
         meticulous_args = default_meticulous_args
@@ -313,3 +310,16 @@ class Experiment(object):
         with self.open('STATUS', 'w') as f:
             f.write('RUNNING')
         atexit.register(exit_hook)
+
+
+class DirtyRepoException(Exception):
+    """Raised when the repo is dirty"""
+    pass
+
+class MismatchedArgsException(Exception):
+    """Raised when attempting to resume an experiment with different argument values"""
+    pass
+
+class MismatchedCommitException(Exception):
+    """Raised when attempting to resume an experiment with different git commit"""
+    pass
