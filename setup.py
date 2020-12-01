@@ -27,6 +27,7 @@ setuptools.setup(
         extras_require={
             'dev': [
                 "sphinx",
+                "libsass",
             ],
         },
         test_suite='pytest',
