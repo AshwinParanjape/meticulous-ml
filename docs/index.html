@@ -16,7 +16,7 @@
     <script src="_static/custom.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Meticulous-ml" href="intro.html" />
+    <link rel="next" title="Getting started" href="getting_started.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -73,11 +73,11 @@
 
 
         <nav id='site-nav' class='site-nav' role='navigation' aria-label='Main'><p class="caption"><span class="caption-text">User guide</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced_tracking.html">Advanced options</a></li>
-<li class="toctree-l1"><a class="reference internal" href="meticulous_cmd.html">Listing on commandline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="listing_on_cmd.html">Listing on commandline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced_reading.html">Programmatic reading</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Documentation</span></p>
@@ -117,51 +117,52 @@
                     
   <div class="section" id="meticulous-ml">
 <h1>Meticulous-ml<a class="headerlink" href="#meticulous-ml" title="Permalink to this headline">¶</a></h1>
-<img alt="https://github.com/AshwinParanjape/meticulous/workflows/tests/badge.svg" src="https://github.com/AshwinParanjape/meticulous/workflows/tests/badge.svg" /><p>Machine learning research involves iterating over ideas and running experiments multiple times.
-For research, reproducibility and perhaps sanity, it is important to keep track of the exact setup and resulting output for each run.
-But is only useful if it is stored in an accessible and usable manner.
+<img alt="https://github.com/AshwinParanjape/meticulous/workflows/tests/badge.svg" src="https://github.com/AshwinParanjape/meticulous/workflows/tests/badge.svg" /><p>Machine learning involves iterating over ideas and running multiple experiments in different configurations.
+For research and reproducibility (and perhaps sanity), it is important to keep track of the exact setup and resulting output of each run.
+But extensive bookkeeping is only useful if the data is made easily accessible and usable.
 Meticulous is a python library to record the setup and the results of experiments in just a few lines of code.
-All the data is stored locally, on the file system, in a human readable format and made further accessible as a Python objects and also a Pandas dataframe.</p>
+All the data is stored locally on the file system in a human readable format.
+It is also made accessible as Python objects and Pandas dataframes.</p>
 <p>When an experiment is run using Meticulous, it</p>
 <ol class="arabic simple">
 <li><p>Creates a new numbered folder to record the experiment.</p></li>
 <li><p>Uses VCS (git) to ensure that the code is committed and records the commit-sha.</p></li>
 <li><p>Extracts (using argparse) and records the arguments passed to the program.</p></li>
-<li><p>Keeps a copy of program output (stdout and stderr).</p></li>
+<li><p>Stores a copy of program output (stdout and stderr).</p></li>
 <li><p>Provides a helper function to open files in the experiment directory and to save a json summary.</p></li>
 </ol>
-<p>When an experiment folder is read in Python using Meticulous,</p>
+<p>When an experiment folder is read programmatically using Meticulous, it</p>
 <ol class="arabic simple">
 <li><p>Reads each experiment into an <code class="docutils literal notranslate"><span class="pre">ExperimentReader</span></code> object (subclassable).</p></li>
 <li><p>Creates a Pandas dataframe with all the stored metadata.</p></li>
 </ol>
 <p>Also provided is a handy command-line script (also called <code class="docutils literal notranslate"><span class="pre">meticulous</span></code>) that provides a quick look at the contents of an experiment folder.</p>
+<div class="section" id="why-meticulous">
+<h2>Why meticulous?<a class="headerlink" href="#why-meticulous" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>⭐️   <strong>Good defaults</strong></dt><dd><p>Bookkeeping isn’t hard, but it takes some effort to get it right.
+Meticulous comes baked in with good defaults and enforces them to avoid common pitfalls.</p>
+</dd>
+<dt>🙈   <strong>Minimal assumptions</strong></dt><dd><p>Meticulous doesn’t make assumptions about where or how you run the experiments.
+The only assumptions are that code is checked into a git repo and you have access to a filesystem</p>
+</dd>
+<dt>📐   <strong>Minimalist design</strong></dt><dd><p>The featureset is kept minimal. The entire package is 3 Python classes and less than of 400 lines of Python code.</p>
+</dd>
+<dt>👩‍💻   <strong>Hackable and extensible</strong></dt><dd><p>An advantage of minimal design is that it is very easy to wrap your head around that is happening under the hood.
+Every project has different needs and meticulous can’t meet every project’s needs.
+But it can empower you by making it easy for you to extend meticulous and to meet them yourself.</p>
+</dd>
+<dt>🗃   <strong>Local storage</strong></dt><dd><p>There are no servers, signups or subscriptions. You keep all your data.</p>
+</dd>
+<dt>❤️ ️ <strong>Made by someone like you</strong></dt><dd><p>This project was born out of a need to streamline ML experimentation for research easily, locally and hackably.
+So there’s a good chance you’ll like it :)</p>
+</dd>
+</dl>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">User guide</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="advanced_tracking.html">Advanced options</a></li>
-<li class="toctree-l1"><a class="reference internal" href="meticulous_cmd.html">Listing on commandline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="advanced_reading.html">Programmatic reading</a></li>
-</ul>
 </div>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">API Documentation</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="meticulous.experiment.html">meticulous.experiment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="meticulous.experiments.html">meticulous.experiments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="meticulous_cmd.html">meticulous script</a></li>
-</ul>
 </div>
 </div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
 </div>
 
 

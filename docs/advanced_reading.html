@@ -17,7 +17,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="meticulous.experiment" href="meticulous.experiment.html" />
-    <link rel="prev" title="Meticulous script" href="meticulous_cmd.html" />
+    <link rel="prev" title="Meticulous script" href="listing_on_cmd.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -75,10 +75,10 @@
 
         <nav id='site-nav' class='site-nav' role='navigation' aria-label='Main'><p class="caption"><span class="caption-text">User guide</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced_tracking.html">Advanced options</a></li>
-<li class="toctree-l1"><a class="reference internal" href="meticulous_cmd.html">Listing on commandline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="listing_on_cmd.html">Listing on commandline</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Programmatic reading</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Documentation</span></p>
@@ -119,20 +119,24 @@
   <div class="section" id="programmatic-reading">
 <h1>Programmatic Reading<a class="headerlink" href="#programmatic-reading" title="Permalink to this headline">¶</a></h1>
 <p>While all the records are kept in a human-readable format on the file system, there are some convenience functions to help you access it programmatically.</p>
+<div class="section" id="reading-a-single-experiment">
+<h2>Reading a single experiment<a class="headerlink" href="#reading-a-single-experiment" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference internal" href="meticulous.experiments.html#meticulous.experiments.ExperimentReader" title="meticulous.experiments.ExperimentReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExperimentReader</span></code></a> takes in the path to the experiment directory
 and reads all the stored information as object attributes. Exact attributes can be found in the API docs.</p>
-<p>If you are storing any other information for each experiment and you want to read it as well, you can customize
-<a class="reference internal" href="meticulous.experiments.html#meticulous.experiments.ExperimentReader" title="meticulous.experiments.ExperimentReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExperimentReader</span></code></a> by subclassing it and reading the extra information.</p>
-<p>py:class:<cite>ExperimentReader &lt;meticulous.experiments.Experiments&gt;</cite> is a utility class to load the entire experiments folder.
-You can point it to a particular <code class="docutils literal notranslate"><span class="pre">project_directory</span></code> and an <code class="docutils literal notranslate"><span class="pre">experiments_directory</span></code>. If you using a subclassed version
-of <a class="reference internal" href="meticulous.experiments.html#meticulous.experiments.ExperimentReader" title="meticulous.experiments.ExperimentReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExperimentReader</span></code></a>, you can provide the class the a parameter
-<code class="docutils literal notranslate"><span class="pre">reader</span></code> which is internally used to read all the experiments.</p>
+<p>If you are storing any other information for each experiment that you would like to include, you can subclass
+<a class="reference internal" href="meticulous.experiments.html#meticulous.experiments.ExperimentReader" title="meticulous.experiments.ExperimentReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExperimentReader</span></code></a>.</p>
+</div>
+<div class="section" id="reading-all-experiments">
+<h2>Reading all experiments<a class="headerlink" href="#reading-all-experiments" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="meticulous.experiments.html#meticulous.experiments.Experiments" title="meticulous.experiments.Experiments"><code class="xref py py-class docutils literal notranslate"><span class="pre">Experiments</span></code></a> is a utility class to load the entire experiments folder.
+You can point it to a particular <code class="docutils literal notranslate"><span class="pre">project_directory</span></code> and an <code class="docutils literal notranslate"><span class="pre">experiments_directory</span></code>. You can also override the <code class="docutils literal notranslate"><span class="pre">reader</span></code>
+which is used internally to read all the experiments, with a subclassed version of <a class="reference internal" href="meticulous.experiments.html#meticulous.experiments.ExperimentReader" title="meticulous.experiments.ExperimentReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExperimentReader</span></code></a>.</p>
 <p>You can access individual experiments by indexing with the experiment id, as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">exps</span> <span class="o">=</span> <span class="n">Experiments</span><span class="p">()</span>
 <span class="n">exps</span><span class="p">[</span><span class="s1">&#39;2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span>
 </pre></div>
 </div>
-<p><a class="reference internal" href="meticulous.experiments.html#meticulous.experiments.Experiments.as_dataframe" title="meticulous.experiments.Experiments.as_dataframe"><code class="xref py py-func docutils literal notranslate"><span class="pre">Experiments.as_dataframe</span></code></a>  returns the metadata, args and
+<p><a class="reference internal" href="meticulous.experiments.html#meticulous.experiments.Experiments.as_dataframe" title="meticulous.experiments.Experiments.as_dataframe"><code class="xref py py-func docutils literal notranslate"><span class="pre">Experiments.as_dataframe()</span></code></a>  returns the metadata, args and
 summary as a Pandas dataframe upon which you can build custom views. For example</p>
 <ul class="simple">
 <li><p>Filter by start/end times</p></li>
@@ -141,6 +145,7 @@ summary as a Pandas dataframe upon which you can build custom views. For example
 <li><p>Aggregate over many random seeds</p></li>
 </ul>
 <p>This requires some Pandas knowledge. Recipes to put together a dashboard are TBD.</p>
+</div>
 </div>
 
 

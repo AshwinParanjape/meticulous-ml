@@ -59,13 +59,35 @@ Choices
 Backstory
 =========
 
-As an NLP PhD student I run lots of ML experiments. There is no standard way of keeping track of experiments. Initially I would concatenate all arguments in a single string. Then I moved on to using random 4 letter folder names for each experiment. Then by the time I would meet with my advisor, I would have forgotten which model change caused the results to improve, because that's part of the model and not the arguments. A couple of years ago (2018) I started writing a python script to automate the "keeping track of experiments". 
+As an NLP PhD student I run lots of ML experiments.
+There is no standard way of keeping track of experiments.
+Initially I would concatenate all arguments in a single string. T
+hen I moved on to using random 4 letter folder names for each experiment.
+Then by the time I would meet with my advisor, I would have forgotten which model change caused the results to improve,
+because that's part of the model and not the arguments.
+A couple of years ago (2018) I started writing a python script to automate the "keeping track of experiments".
 
-But then I found myself browsing through the filesystem to find which was the best configuration. So I built a fancy dashboard for myself using a Jupyter notebook. But then I moved to a different project and the project specific dashboard would work no more. So I kept whittling the featureset until I was left with a core that was minimal, which meant it worked across all the different projects and setups. And easily extensible, which meant it satisfied individual needs without much effort. 
+But then I found myself browsing through the filesystem to find which was the best configuration.
+So I built a fancy dashboard for myself using a Jupyter notebook.
+After that I moved to a different project and the project specific dashboard would work no more.
+So I kept whittling the featureset until I was left with a core that was minimal,
+which meant it worked across all the different projects and setups.
+And easily extensible, which meant it satisfied individual needs without much effort.
 
-Meanwhile many other experiment tracking and management systems were being developed and I was hopeful I could use them instead. `Comet.ml <https://www.comet.ml/site/>`_, `Weights & Biases <https://docs.wandb.com>`_ are cloud based (or self hosted with a server, but still needs a running server). A lot of times I was doing more complex things than graphing the validation loss over epochs and the web UI seemed claustrophobic compared to the freedom I had when I could simply read some files into a dataframe. Others like `Kubeflow <https://www.kubeflow.org>`_, `codalab <https://codalab.org>`_ seemed heavy and imposed restrictions on how and where I ran my code. 
+Meanwhile many other experiment tracking and management systems were being developed and I was hopeful I could use them instead.
+`Comet.ml <https://www.comet.ml/site/>`_, `Weights & Biases <https://docs.wandb.com>`_ are cloud based (or self hosted with a server, but still needs a running server).
+A lot of times I was doing more complex things than graphing the validation loss over epochs and the web UI seemed claustrophobic compared to the freedom I had when I could simply read some files into a dataframe.
+Others like `Kubeflow <https://www.kubeflow.org>`_, `codalab <https://codalab.org>`_ seemed heavy and imposed restrictions on how and where I ran my code.
 
-In my opinion, a one stop solution doesn't exist, which is what these tools are trying to do (and sell). People need different graphs, complex filters and have differing privacy and collaboration requirements. And plus ML practioners are typically good at and don't need help manipulating data and plotting graphs. With meticulous I had something that was lightweight (no server), collaborative yet private (comes free with the filesystem), readable (human readable file format) and extensible (experiments as Python objects). A major aspect was defining a standardized specification for what gets stored and where. So I decided to put some weekends into re-examining all the design decisions, cleaning up code, adding basic tests and preparing to release (or rather publicize) meticulous. 
+In my opinion, a one stop solution doesn't exist, which is what these tools are trying to do (and sometimes sell).
+People need different graphs, complex filters and have differing privacy and collaboration requirements.
+And plus ML practioners are typically good at and don't need help manipulating data and plotting graphs.
+With meticulous I had something that was lightweight (no server),
+collaborative yet private (comes free with the filesystem),
+readable (human readable file format) and extensible (experiments as Python objects).
+A major aspect was defining a standardized specification for what gets stored and where.
+So I decided to put some weekends into re-examining all the design decisions, cleaning up code,
+adding basic tests and preparing to release (or rather publicize) meticulous.
 
 
 

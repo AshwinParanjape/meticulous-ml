@@ -16,8 +16,7 @@
     <script src="_static/custom.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Programmatic Reading" href="advanced_reading.html" />
-    <link rel="prev" title="Advanced writing options" href="advanced_tracking.html" />
+    <link rel="prev" title="meticulous.experiments" href="meticulous.experiments.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -75,10 +74,10 @@
 
         <nav id='site-nav' class='site-nav' role='navigation' aria-label='Main'><p class="caption"><span class="caption-text">User guide</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced_tracking.html">Advanced options</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Listing on commandline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="listing_on_cmd.html">Listing on commandline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced_reading.html">Programmatic reading</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API Documentation</span></p>
@@ -158,26 +157,6 @@
 </dl>
 </dd>
 </dl>
-<p>Running the script with <code class="docutils literal notranslate"><span class="pre">--args</span> <span class="pre">all</span> <span class="pre">--summary</span></code> produces:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$meticulous experiments/ --args all --summary
-                                                                                                  args                                                                                   summary
-                                 curexpdir           start_time   status status_message batch_size test_batch_size epochs   lr gamma no_cuda dry_run   seed log_interval save_model val_loss
-(, sha)              expid
-64decb56b912b1190... 1      experiments/1/  2020-11-30T00:56...  SUCCESS                        64            1000     14  1.0   0.7   False   False      1           10      False   0.4828
-                     2      experiments/2/  2020-11-30T00:58...  SUCCESS                        64            1000     14  0.1   0.7   False   False      1           10      False   0.4853
-                     3      experiments/3/  2020-11-30T00:58...  SUCCESS                        64            1000     14  1.0   0.7   False   False  98789           10      False   0.3863
-</pre></div>
-</div>
-<p>Running the script with <code class="docutils literal notranslate"><span class="pre">--args</span> <span class="pre">**truncated**</span> <span class="pre">--summary</span></code> removes the args which are common to all experiments and declutters the output:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$meticulous experiments/ --args truncated --summary
-                                                                                            args         summary
-                                 curexpdir           start_time   status status_message   lr   seed val_loss
-(, sha)              expid
-64decb56b912b1190... 1      experiments/1/  2020-11-30T00:56...  SUCCESS                 1.0      1   0.4828
-                     2      experiments/2/  2020-11-30T00:58...  SUCCESS                 0.1      1   0.4853
-                     3      experiments/3/  2020-11-30T00:58...  SUCCESS                 1.0  98789   0.3863
-</pre></div>
-</div>
 </div>
 
 

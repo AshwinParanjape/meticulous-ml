@@ -20,7 +20,7 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 livehtml:
-	sphinx-autobuild "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) -a --ignore "/Users/ashwinparanjape/projects/meticulous/docs/_static/custom.css" --pre-build "python build_css.py" --watch ../meticulous
+	sphinx-autobuild "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O) -a --ignore "/Users/ashwinparanjape/projects/meticulous/docsrc/_static/custom.css" --pre-build "python build_css.py" --watch ../meticulous
 
 github: 
 	@make html

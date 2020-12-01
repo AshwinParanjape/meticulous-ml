@@ -110,9 +110,9 @@ You can run a utility script ``meticulous`` to list all the experiments in the f
 .. code:: shell
 
     $ meticulous experiments/
-									 curexpdir           begin_time   status status_message
-	(, sha)              expid                                                             
-	970d8ad001f5d42a9... 1      experiments/1/  2020-11-02T12:48...  SUCCESS               
+                                     curexpdir           begin_time   status status_message
+    (, sha)              expid
+    970d8ad001f5d42a9... 1      experiments/1/  2020-11-02T12:48...  SUCCESS
 
 
 Code snippet
