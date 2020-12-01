@@ -35,7 +35,6 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.githubpages',
     'recommonmark',
-    'sphinxcontrib.autoprogram',
 ]
 
 source_suffix = {
