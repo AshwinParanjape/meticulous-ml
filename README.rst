@@ -156,6 +156,25 @@ The above code will create a directory structure in your project directory as fo
 * ``STATUS`` file is either RUNNING, SUCCESS, ERROR with the python traceback.
 * ``stdout`` and ``stderr`` files contain the two output streams.
 
+How to record many experiments in a single script?
+-------------------------------
+
+Sometimes we want to run a lot of experiments in a single script, for instance when we tune hyperparameters.
+You can do this conveniently with meticulous.
+
+.. code:: python
+
+  for k in range(1, 10):
+      with Experiment({"k": k}) as exp:
+          print(f"running kmeans with k={k}")
+          kmeans = KMeans(k=k).fit(X)
+          exp.summary({"loss": kmeans._inertia})
+          print(f"Loss was {kmeans._ineartia}")
+
+
+Each experiment starts tracking when it is initialized and stops tracking once the code block is exited. This is also true for the capture of the standard output.
+When an experiment fails with an exception, the error is stored and the execution of the next experiment resumes.
+
 How to get a quick summary?
 ---------------------------
 You can run a utility script ``meticulous`` to list all the experiments in the folder with associated metadata
