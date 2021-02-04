@@ -59,7 +59,7 @@ Simplest way is to use pip
 
 .. code:: bash
 
-  pip install git+https://github.com/ashwinparanjape/meticulous-ml.git
+  pip install git+https://github.com/Whadup/meticulous-ml.git
 
 
 How to record an experiment?
