@@ -36,7 +36,8 @@ setuptools.setup(
         ],
         install_requires=[
             "gitpython",
-            "pandas"
+            "pandas",
+            "tabulate"
         ],
         tests_require=[
             'pytest',
