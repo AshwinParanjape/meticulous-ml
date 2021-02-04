@@ -63,19 +63,21 @@ if __name__ == '__main__':
     if args.filter:
         try:
             final_df = final_df.query(args.filter)
-        except:
+        except Exception as e:
+            print("Error in --filter: ", e)
             print(f"Checkout https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.query.html" + \
                   f"for an overview on the query syntax. \nAllowed columns: {final_df.columns}")
     if args.groupby:
-        # try:
+        try:
             by = [x.strip() for x in args.groupby.split(",")]
             final_df = final_df.groupby(by=by, dropna=False, group_keys=False, as_index=False) \
                         .agg({k : [np.mean, np.std] if np.issubdtype(final_df.dtypes[k], np.float64) else np.size for k in final_df.columns if k not in by})
             final_df.columns = ['_'.join([x for x in col if x != ""]).strip() for col in final_df.columns.values]
 
-        # except :
-        #     print("Checkout https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html for an intro to group-by for people who speak sql.")
-        #     print("We aggregate floats by average + std and count everything else. If you want different behavior, export a pandas dataframe with --export outfile.pd and then do it on your own")
+        except Exception as e:
+            print("Error in --groupby: ", e)
+            print("Checkout https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html for an intro to group-by for people who speak sql.")
+            print("We aggregate floats by average + std and count everything else. If you want different behavior, export a pandas dataframe with --export outfile.pd and then do it on your own")
     if args.columns:
         final_df = final_df[[x.strip() for x in args.columns.split(",")]]
     if args.sort:
