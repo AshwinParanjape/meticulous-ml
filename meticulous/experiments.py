@@ -5,7 +5,7 @@ import os
 import json
 import traceback
 import pandas as pd
-from pandas.io.json import json_normalize
+from pandas import json_normalize
 
 class ExperimentReader(object):
     """Class to read an experiment folder"""
