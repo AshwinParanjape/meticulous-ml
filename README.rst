@@ -167,6 +167,37 @@ You can run a utility script ``meticulous`` to list all the experiments in the f
     (, sha)              expid
     970d8ad001f5d42a9... 1      experiments/1/  2020-11-02T12:48...  SUCCESS
 
+Advanced summary features
+---------------------------
+The utility script ``meticulous`` also offers some advanced database operations that allow you to extract precisely the experiments of interest as well as some interesting aggregates.
+
+The operations supported are filtering, grouping, sorting and selecting columns, and they are applied in exactly this order.
+Note this convention on the column names: All arguments of the experiment are prefixed with ``args_`` whereas all results in the summary dictionary are prefixed with ``summary_``.
+
+Filtering allows you to specify a `pandas query <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.query.html>`_ for experiments using the ``--filter`` argument. 
+
+We groups experiments based on a given comma-seperated list of columns using the ``--groupby`` argument. The remaining columns are aggregated: For real-valued columns, a mean and standard deviation are reported, which is particularly helpful for machine learning metrics like accuracy or loss. All other columns are aggregated by count.
+
+To sort the results, we can specify a comma-seperated list of columns to sort by using `--sort` argument. To reverse the order, specify the ``--sort_reverse`` flag.
+
+If we're only interested in a subset of all columns, we can specify a comma-seperated list of column-names using the ``--columns`` argument. Note that the `--groupby` option changes the names of aggregated attributes.
+
+We can also limit the output to only the last ``k`` columns with th e ``--tails k`` argument.
+
+.. code:: shell
+
+    $ meticulous experiments/ \
+        --filter "args_xval_strategy=='xval'" \
+        --groupby args_k,args_method,args_n_estimators \
+        --columns summary_significance_mean,summary_significance_std \
+        --sort summary_significance_mean \
+        --export table.md
+    args_k args_method args_n_estimators     summary_significance_mean  summary_significance_std                                                                     
+    32     KMeans      1                              19.5634                           0.6418           
+    16     KMeans      1                              18.2383                           0.8171           
+    8      KMeans      1                              15.1532                           0.6727
+
+We can also export the summary in a number of different formats by specifying the ``--export {filename}`` argument. Depending on the ending of filename, we either export a pandas dataframe (``*.pd``), a csv table (``*.csv``), a json (``*.json``), a markdown table (``*.md``) or a LaTeX table (``*.tex``). 
 
 Code snippet
 ------------
