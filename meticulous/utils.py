@@ -35,6 +35,8 @@ class Tee(object):
         :param stdstream: name of the output stream, that gets replaced by the Tee object. Must be either stdout or stderr
         :param fileobject: output file object that needs to be flushed and closed
         """
+        if stdstream not in ["stdout", "stderr"]:
+            raise RuntimeError(f"sys.{stdstream} is not a valid stream to redirect.")
         self.file = fileobject
         self.stdstream_name = stdstream
         self.stdstream = sys.__dict__[stdstream]
