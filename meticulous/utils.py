@@ -32,24 +32,17 @@ class Tee(object):
     """
     def __init__(self, stdstream, fileobject):
         """
-        :param stdstream: output stream, that gets replaced by the Tee object
+        :param stdstream: name of the output stream, that gets replaced by the Tee object. Must be either stdout or stderr
         :param fileobject: output file object that needs to be flushed and closed
         """
         self.file = fileobject
-        self.stdstream = stdstream
-        self.stdout= stdstream is sys.stdout
-        self.stderr= stdstream is sys.stderr
-        if not self.stderr and not self.stdout:
-            sys.stderr.write("WARNING: It seems that you are nesting experiments. This is untested, but you do you!")
-        stdstream = self
+        self.stdstream_name = stdstream
+        self.stdstream = sys.__dict__[stdstream]
+        sys.__dict__[stdstream] = self
 
     def close(self):
         """Close the file and set the stdstream back to the original stdstream"""
-        stdstream = self.stdstream
-        if self.stdout:
-            sys.stdout = self.stdstream
-        if self.stderr:
-            sys.stderr = self.stdstream
+        sys.__dict__[self.stdstream_name] = self.stdstream
         self.file.close()
 
     def __del__(self):

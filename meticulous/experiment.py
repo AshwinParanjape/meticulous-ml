@@ -135,11 +135,9 @@ class Experiment(object):
             json.dump(self.metadata, f, indent=4)
 
         # Tee stdout and stderr to files as well
-        self.stdout = Tee(sys.stdout, self.open('stdout', 'a'))
-        sys.stdout = self.stdout
-        self.stderr = Tee(sys.stderr, self.open('stderr', 'a'))
+        self.stdout = Tee("stdout", self.open('stdout', 'a'))
+        self.stderr = Tee("stderr", self.open('stderr', 'a'))
 
-        sys.stderr = self.stderr
         self._set_status_file()
 
     @staticmethod
