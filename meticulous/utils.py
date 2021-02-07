@@ -41,11 +41,15 @@ class Tee(object):
         self.stdstream_name = stdstream
         self.stdstream = sys.__dict__[stdstream]
         sys.__dict__[stdstream] = self
+        self.closed = False
 
     def close(self):
         """Close the file and set the stdstream back to the original stdstream"""
-        sys.__dict__[self.stdstream_name] = self.stdstream
+        if self.closed:
+            return
         self.file.close()
+        sys.__dict__[self.stdstream_name] = self.stdstream
+        self.closed = True
 
     def __del__(self):
         """Close the file and set the stdstream back to the original stdstream"""
