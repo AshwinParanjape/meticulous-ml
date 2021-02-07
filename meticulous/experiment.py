@@ -279,6 +279,7 @@ class Experiment(object):
         except FileNotFoundError as e:
             print("Creating local .gitignore")
             ignored = False
+        # if the experiment directory is located inside the repo, but not in the .gitignore
         if not ignored and not os.path.relpath(self.experiments_directory, self.repo_directory).startswith(".."):
             print("Adding experiments directory to .gitignore")
             with open(os.path.join(self.repo_directory, '.gitignore'), 'a') as f:
