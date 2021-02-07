@@ -5,7 +5,12 @@ import os
 import json
 import traceback
 import pandas as pd
-from pandas.io.json import json_normalize
+
+# Use the deprecated import as the new one fails with Python 3.5
+try: 
+    from pandas import json_normalize
+except: 
+    from pandas.io.json import json_normalize
 
 class ExperimentReader(object):
     """Class to read an experiment folder"""

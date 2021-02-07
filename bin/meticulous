@@ -3,6 +3,7 @@ import argparse
 from meticulous import Experiments
 from meticulous.summary_utils import informative_cols
 import pandas as pd
+import numpy as np
 pd.set_option('display.max_colwidth', 20)
 pd.set_option('display.max_columns', 0)
 pd.set_option('display.max_rows', None)
@@ -11,14 +12,21 @@ pd.set_option('precision', 4)
 def get_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('directory', action="store", help='Directory with stored experiments')
-    parser.add_argument("--args", type=str, choices=['none', 'truncated', 'non-default', 'all'], default='none',
+    parser.add_argument('--columns', action="store", type=str, help="Comma-seperated list of columns to show")
+    parser.add_argument('--export', type=str, action="store", help='Export the results')
+    parser.add_argument('--filter', type=str, action="store", help='Filter the results (Pandas Syntax)')
+    parser.add_argument('--groupby', type=str, action="store", help='Group and Aggregate the results (Pandas Syntax)')
+    parser.add_argument('--sort', type=str, action="store", help='Sort using these columns')
+    parser.add_argument('--sort_reverse', action="store_true", help='Reverse sort order')
+
+    parser.add_argument("--args", type=str, choices=['none', 'truncated', 'non-default', 'all'], default='all',
                         help='Display args; \n'
                              'none        - don\'t display args,\n'
                              'truncated   - removes all values which stay constant across experiments\n,'
                              'non-default - shows arguments that modify default values\n'
                              'all         - all arguments')
-
-    parser.add_argument("--summary", action='store_true', help="Show experiment summary")
+    parser.add_argument("--no_summary", dest="summary", action='store_false', help="Show experiment summary")
+    parser.add_argument("--tail", type=int, default=-1, help="Show only the last n rows.")
     return parser
 
 if __name__ == '__main__':
@@ -49,5 +57,45 @@ if __name__ == '__main__':
     if args.summary:
         dfs.append(df[['summary']])
     final_df = pd.concat(dfs, axis=1)
+    
     final_df = final_df.reset_index().set_index([('', 'sha'), 'expid'])
+    final_df.columns = ['_'.join([x for x in col if x != ""]).strip() for col in final_df.columns.values]
+    if args.filter:
+        try:
+            final_df = final_df.query(args.filter)
+        except Exception as e:
+            print("Error in --filter: ", e)
+            print(f"Checkout https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.query.html" + \
+                  f"for an overview on the query syntax. \nAllowed columns: {final_df.columns}")
+    if args.groupby:
+        try:
+            by = [x.strip() for x in args.groupby.split(",")]
+            final_df = final_df.groupby(by=by, dropna=False, group_keys=False, as_index=False) \
+                        .agg({k : [np.mean, np.std] if np.issubdtype(final_df.dtypes[k], np.float64) else np.size for k in final_df.columns if k not in by})
+            final_df.columns = ['_'.join([x for x in col if x != ""]).strip() for col in final_df.columns.values]
+
+        except Exception as e:
+            print("Error in --groupby: ", e)
+            print("Checkout https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html for an intro to group-by for people who speak sql.")
+            print("We aggregate floats by average + std and count everything else. If you want different behavior, export a pandas dataframe with --export outfile.pd and then do it on your own")
+    if args.columns:
+        final_df = final_df[[x.strip() for x in args.columns.split(",")]]
+    if args.sort:
+        by = [x.strip() for x in args.sort.split(",")]
+        final_df = final_df.sort_values(by=by, ascending=args.sort_reverse)
+    if args.tail > 0:
+        final_df = final_df.tail(args.tail)
     print(final_df)
+    if args.export:
+        if args.export.endswith(".pd"):
+            final_df.to_pickle(args.export)
+        elif args.export.endswith(".csv"):
+            final_df.to_csv(args.export)
+        elif args.export.endswith(".json"):
+            final_df.to_json(args.export)
+        elif args.export.endswith(".tex"):
+            final_df.to_latex(args.export)
+        elif args.export.endswith(".md"):
+            final_df.to_markdown(open(args.export, "w"))
+        else:
+            raise RuntimeError("Unknown export format.")
