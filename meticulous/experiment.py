@@ -135,11 +135,9 @@ class Experiment(object):
             json.dump(self.metadata, f, indent=4)
 
         # Tee stdout and stderr to files as well
-        self.stdout = Tee(sys.stdout, self.open('stdout', 'a'))
-        sys.stdout = self.stdout
-        self.stderr = Tee(sys.stderr, self.open('stderr', 'a'))
+        self.stdout = Tee("stdout", self.open('stdout', 'a'))
+        self.stderr = Tee("stderr", self.open('stderr', 'a'))
 
-        sys.stderr = self.stderr
         self._set_status_file()
 
     @staticmethod
@@ -275,10 +273,11 @@ class Experiment(object):
         # ignore the experiment directory from git tree if not ignored yet
         try:
             with open(os.path.join(self.repo_directory, '.gitignore'), 'r') as f:
-                ignored = os.path.relpath(self.experiments_directory, self.repo_directory) in [p.strip() for p in f.readlines()]
+                ignored = os.path.relpath(self.experiments_directory, self.repo_directory) in [os.path.normpath(p.strip()) for p in f.readlines()]
         except FileNotFoundError as e:
             print("Creating local .gitignore")
             ignored = False
+        # if the experiment directory is located inside the repo, but not in the .gitignore
         if not ignored and not os.path.relpath(self.experiments_directory, self.repo_directory).startswith(".."):
             print("Adding experiments directory to .gitignore")
             with open(os.path.join(self.repo_directory, '.gitignore'), 'a') as f:
