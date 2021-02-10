@@ -5,6 +5,7 @@ from typing import Dict
 
 from meticulous.utils import Tee, ExitHooks
 from meticulous.repo import REPO, COMMIT
+from meticulous.random_seed import set_random_seed, generate_random_seed
 import atexit
 import traceback
 import logging
@@ -123,6 +124,12 @@ class Experiment(object):
             self.curexpdir = os.path.join(self.experiments_directory, str(max(existing_int_exp+[0,])+1))
             os.mkdir(self.curexpdir)
             logger.info("New experiment at {curexpdir}".format(curexpdir=self.curexpdir))
+
+        #Random Seeds
+        if "random_seed" in self.metadata:
+            random_seed.set_random_seed(self.metadata["random_seed"])
+        else:
+            self.metadata["random_seed"] = generate_random_seed()
 
         #Write experiment info
         with self.open('args.json', 'w') as f:
