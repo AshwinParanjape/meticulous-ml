@@ -36,7 +36,7 @@ class Tee(object):
         :param fileobject: output file object that needs to be flushed and closed
         """
         if stdstream not in ["stdout", "stderr"]:
-            raise RuntimeError(f"sys.{stdstream} is not a valid stream to redirect.")
+            raise RuntimeError("sys.{} is not a valid stream to redirect.".format(stdstream))
         self.file = fileobject
         self.stdstream_name = stdstream
         self.stdstream = sys.__dict__[stdstream]
