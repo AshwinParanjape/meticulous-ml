@@ -5,6 +5,8 @@ Parts of this code are inspired by https://github.com/IDSIA/sacred/blob/master/s
 import random
 import sys
 
+import logging
+logger = logging.getLogger('meticulous')
 
 def _set_numpy_random_seed(seed):
     # check for numpy
@@ -17,15 +19,13 @@ def _set_torch_random_seed(seed):
     if "torch" in sys.modules:
         import torch
         torch.manual_seed(seed)
+        logging.info("setting torch random seed")
 def _set_tensorflow_random_seed(seed):
     # check for tensorflow
     if "tensorflow" in sys.modules:
         import tensorflow as tf
         tf.random.set_seed(seed)
-def _set_mxnet_random_seed(seed):
-    pass
-def _set_cntk_random_seed(seed):
-    pass
+        logging.info("setting tensorflow random seed")
 
 
 def set_random_seed(seed):

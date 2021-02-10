@@ -5,7 +5,7 @@ from typing import Dict
 
 from meticulous.utils import Tee, ExitHooks
 from meticulous.repo import REPO, COMMIT
-from meticulous.random_seed import set_random_seed, generate_random_seed
+from meticulous.random_seeds import set_random_seed, generate_random_seed
 import atexit
 import traceback
 import logging
