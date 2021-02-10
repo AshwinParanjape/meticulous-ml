@@ -273,7 +273,7 @@ class Experiment(object):
         # ignore the experiment directory from git tree if not ignored yet
         try:
             with open(os.path.join(self.repo_directory, '.gitignore'), 'r') as f:
-                ignored = os.path.relpath(self.experiments_directory, self.repo_directory) in [p.strip() for p in f.readlines()]
+                ignored = os.path.relpath(self.experiments_directory, self.repo_directory) in [os.path.normcase(p.strip()) for p in f.readlines()]
         except FileNotFoundError as e:
             print("Creating local .gitignore")
             ignored = False
