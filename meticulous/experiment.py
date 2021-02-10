@@ -1,7 +1,7 @@
 import sys, os, json, datetime
 from glob import glob
 from git import Repo
-from typing import Dict
+from typing import Dict, Optional
 
 from meticulous.utils import Tee, ExitHooks
 from meticulous.repo import REPO, COMMIT
@@ -21,7 +21,7 @@ class Experiment(object):
     """Class to keep track and store an experiment's configurations, the code version (via git) and the summary results"""
 
     def __init__(self, args: Dict, default_args:Dict={}, project_directory: str ='', experiments_directory:str ='experiments',
-                 experiment_id=None, description:str ='', norecord:bool = False ):
+                 experiment_id=None, description:str ='', random_seed:Optional[int] = None, norecord:bool = False ):
         """Setup the experiment configuration
 
         1. Find a git repo by looking at the project and its parent directories
@@ -128,6 +128,8 @@ class Experiment(object):
         #Random Seeds
         if "random_seed" in self.metadata:
             random_seed.set_random_seed(self.metadata["random_seed"])
+        elif random_seed is not None:
+            self.metadata["random_seed"] = set_random_seed(random_seed)
         else:
             self.metadata["random_seed"] = generate_random_seed()
 
@@ -173,6 +175,7 @@ class Experiment(object):
                                 '   checks for matching args and githead-sha before resuming, '
                                 'otherwise, creates a new experiment folder')
         group.add_argument('--description', action="store", default=description, help='A text description for this experiment')
+        group.add_argument('--random_seed', action="store", type=int, help='Use this static random seed')
         group.add_argument('--norecord', action="store_true", default=norecord,
                            help='Disable experiment tracking. '
                                 'Repo can be dirty and no new experiment folders are created. '
