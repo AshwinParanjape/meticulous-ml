@@ -254,6 +254,10 @@ class Experiment(object):
             args = (path,)+ args[1:]
         return open(*args, **kwargs)
 
+    @property
+    def seed(self):
+        return self.metadata["random_seed"]
+
     def _set_repo_directory(self):
         """Finds a git repo by searching the project and its parent directories and sets self.repo_directory"""
         self.repo = REPO
