@@ -41,7 +41,7 @@ def _set_mxnet_random_seed(seed):
         mxnet.random.seed(seed)
         logging.info("setting mxnet random seed")
 
-
+THIRD_PARTY = [_set_numpy_random_seed, _set_torch_random_seed, _set_tensorflow_random_seed, _set_mxnet_random_seed]
 
 def set_random_seed(seed):
     """
@@ -50,10 +50,8 @@ def set_random_seed(seed):
     Issues an info to the meticulous logger if a third-party random seed is touched.
     """
     random.seed(seed)
-    _set_numpy_random_seed(seed)
-    _set_torch_random_seed(seed)
-    _set_tensorflow_random_seed(seed)
-    _set_mxnet_random_seed(seed)
+    for set_seed in THIRD_PARTY:
+        set_seed(seed)
     return seed
 
 def generate_random_seed():

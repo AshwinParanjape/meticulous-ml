@@ -77,6 +77,9 @@ class Experiment(object):
         self.metadata['start-time'] = datetime.datetime.now().isoformat()
         self.metadata['command'] = sys.argv
 
+        self.metadata["python_modules"] = self._get_modules()
+        self.metadata["python_interpreter"] = sys.executable
+        self.metadata["python_version"] = sys.version
         self.curexpdir = None
 
         if experiment_id:
@@ -330,6 +333,29 @@ class Experiment(object):
             f.write('RUNNING')
         self.atexit_hook = exit_hook
         atexit.register(self.atexit_hook)
+
+    def _get_modules(self):
+        """
+        Apply a heuristic to identify the python modules used by the experiment and log their version numbers.
+        Tries to eliminate as many standard packages as possible from the list. 
+        Might be to agressive at times, though, particularly when packages have been added to the sys.path manually.
+        You shouldn't do that anyways...
+        """
+        mods = set([x.split(".")[0] for x in sys.modules.keys()])
+        modules = []
+        for m in mods:
+            if m.startswith("_"):
+                continue
+            if hasattr(sys.modules[m], "__file__"):
+                if sys.modules[m].__file__ is None or "site-packages" not in sys.modules[m].__file__:
+                        continue
+            else:
+                continue
+            if hasattr(sys.modules[m], "__version__"):
+                modules.append("{}=={}".format(m, sys.modules[m].__version__))
+            else:
+                modules.append(m)
+        return modules
 
     def finish(self, status="SUCCESS"):
         self.metadata['end-time'] = datetime.datetime.now().isoformat()
