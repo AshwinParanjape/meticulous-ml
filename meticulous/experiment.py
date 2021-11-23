@@ -63,7 +63,8 @@ class Experiment(object):
 
         #Check if the repo is clean
         if self.repo.is_dirty():
-            raise DirtyRepoException("There are some tracked but uncommitted files. Please commit them or remove them from git tracking.")
+#            raise DirtyRepoException("There are some tracked but uncommitted files. Please commit them or remove them from git tracking.")
+            print(DirtyRepoException("There are some tracked but uncommitted files. Please commit them or remove them from git tracking."))
 
         self._set_experiments_directory(experiments_directory)
 
@@ -202,7 +203,7 @@ class Experiment(object):
         args = parser.parse_args(arg_list)
         meticulous_args = {}
         args = vars(args)
-        for arg in ['project_directory', 'experiments_directory', 'experiment_id', 'description', 'resume', 'norecord']:
+        for arg in ['project_directory', 'experiments_directory', 'experiment_id', 'description', 'resume', 'norecord', 'random_seed']:
             if arg in args:
                 meticulous_args[arg] = args[arg]
         return meticulous_args
@@ -226,7 +227,7 @@ class Experiment(object):
         args = parser.parse_args(arg_list)
         args = vars(args)
         meticulous_args = default_meticulous_args
-        for arg in ['project_directory', 'experiments_directory', 'experiment_id', 'description', 'resume', 'norecord']:
+        for arg in ['project_directory', 'experiments_directory', 'experiment_id', 'description', 'resume', 'norecord', 'random_seed']:
             if arg in args:
                 meticulous_args[arg] = args[arg]
                 del args[arg]
@@ -239,7 +240,7 @@ class Experiment(object):
 
         return cls(args, default_args=default_args, **meticulous_args)
 
-    def summary(self, summary_dict: Dict):
+    def summary(self, summary_dict:Optional[Dict]=None, **kwargs):
         """Takes a dictionary object score and (over)writes it in the experiment directory"""
         if self.norecord:
             return
@@ -248,7 +249,7 @@ class Experiment(object):
                 summary = json.load(f)
         except FileNotFoundError:
             summary = {}
-        summary.update(summary_dict)
+        summary.update(({} if summary_dict is None else summary_dict) | kwargs)
         with self.open('summary.json', 'w') as f:
             json.dump(summary, f, indent=4)
 
