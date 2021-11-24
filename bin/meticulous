@@ -18,7 +18,7 @@ def get_parser():
     parser.add_argument('--groupby', type=str, action="store", help='Group and Aggregate the results (Pandas Syntax)')
     parser.add_argument('--sort', type=str, action="store", help='Sort using these columns')
     parser.add_argument('--sort_reverse', action="store_true", help='Reverse sort order')
-
+    parser.add_argument('--include_dirty', action="store_true", help='Include experiments performed with dirty git repositories')
     parser.add_argument("--args", type=str, choices=['none', 'truncated', 'non-default', 'all'], default='all',
                         help='Display args; \n'
                              'none        - don\'t display args,\n'
@@ -32,7 +32,7 @@ def get_parser():
 if __name__ == '__main__':
     parser = get_parser()
     args = parser.parse_args()
-    exps = Experiments(experiments_directory=args.directory)
+    exps = Experiments(experiments_directory=args.directory, include_dirty=args.include_dirty)
     df = exps.as_dataframe()
     display_df = df[['']]
     dfs = [display_df]

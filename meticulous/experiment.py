@@ -1,4 +1,6 @@
 import sys, os, json, datetime
+from ruamel.yaml import YAML
+from ruamel.yaml.representer import Representer
 from glob import glob
 from git import Repo
 from typing import Dict, Optional
@@ -11,6 +13,30 @@ import traceback
 import logging
 logger = logging.getLogger('meticulous')
 
+class _Representer(Representer):
+    def __init__(self, dumper=None, **kwargs):
+        super().__init__(default_style="|", default_flow_style=False, dumper=dumper)
+    def represent_scalar(self, tag, value, style=None, anchor=None):
+        from ruamel.yaml.nodes import ScalarNode
+        # type: (Any, Any, Any, Any) -> Any
+        if style is None:
+            style = self.default_style
+        comment = None
+        if not "\n" in value:
+            style = None
+        if style and style[0] in '|>':
+            comment = getattr(value, 'comment', None)
+            if comment:
+                comment = [None, [comment]]
+        node = ScalarNode(tag, value, style=style, comment=comment, anchor=anchor)
+        if self.alias_key is not None:
+            self.represented_objects[self.alias_key] = node
+        return node
+
+yaml = YAML()
+yaml.width = 1000
+yaml.version = (1, 2)
+yaml.Representer = _Representer
 
 ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
@@ -76,9 +102,10 @@ class Experiment(object):
         self.metadata['githead-sha'] = commit.hexsha
         self.metadata['githead-message'] = commit.message
         self.metadata['git-diffs'] = DIFFS
+        self.metadata['git-dirty'] = self.repo.is_dirty()
         self.metadata['description'] = description
         self.metadata['start-time'] = datetime.datetime.now().isoformat()
-        self.metadata['command'] = sys.argv
+        self.metadata['command'] = " ".join(sys.argv)
 
         self.metadata["python_modules"] = self._get_modules()
         self.metadata["python_interpreter"] = sys.executable
@@ -142,12 +169,18 @@ class Experiment(object):
         #Write experiment info
         with self.open('args.json', 'w') as f:
             json.dump(args, f, indent=4)
+        with self.open('args.yaml', 'w') as f:
+            yaml.dump(args, f)
 
         with self.open('default_args.json', 'w') as f:
             json.dump(default_args, f, indent=4)
+        with self.open('default_args.yaml', 'w') as f:
+            yaml.dump(default_args, f)
 
         with self.open('metadata.json', 'w') as f:
             json.dump(self.metadata, f, indent=4)
+        with self.open('metadata.yaml', 'w') as f:
+            yaml.dump(self.metadata, f)
 
         # Tee stdout and stderr to files as well
         self.stdout = Tee("stdout", self.open('stdout', 'a'))

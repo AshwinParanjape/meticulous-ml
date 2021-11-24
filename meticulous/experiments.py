@@ -40,6 +40,7 @@ class ExperimentReader(object):
         # Extract useful attributes
         self.metadata['command'] = ' '.join(self.metadata.get('command', []))
         self.sha = self.metadata.get('githead-sha', None)
+        self.dirty = self.metadata.get("git-dirty", False)
         self.start_time = self.metadata.get('start-time', os.path.getctime(self.curexpdir))
 
         # Load args
@@ -99,7 +100,7 @@ class ExperimentReader(object):
 
 class Experiments(object):
     """Class to load an experiments folder"""
-    def __init__(self, project_directory:str = '', experiments_directory:str = None, reader = ExperimentReader):
+    def __init__(self, project_directory:str = '', experiments_directory:str = None, reader = ExperimentReader, include_dirty:bool=False):
         """
         Load the repo from project_directory and experiments from expdir using ExperimentReader class.
 
@@ -111,6 +112,7 @@ class Experiments(object):
         self.project_directory = project_directory
         self.repo = Repo(self.project_directory, search_parent_directories=True)
         self.repodir = self.repo.working_dir
+        self.include_dirty = include_dirty
         if experiments_directory:
             self.experiments_directory = experiments_directory
         else:
@@ -126,7 +128,8 @@ class Experiments(object):
         for exp in glob(self.experiments_directory+'/*/'):
             try:
                 experimentReader = self.reader(exp)
-                experiments.append(experimentReader)
+                if not experimentReader.dirty or self.include_dirty:
+                    experiments.append(experimentReader)
             except Exception as e:
                 print("Unable to read {exp}".format(exp=exp), file=sys.stderr)
                 traceback.print_exc(file=sys.stderr)
