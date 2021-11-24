@@ -4,7 +4,7 @@ from git import Repo
 from typing import Dict, Optional
 
 from meticulous.utils import Tee, ExitHooks
-from meticulous.repo import REPO, COMMIT
+from meticulous.repo import REPO, COMMIT, DIFFS
 from meticulous.random_seeds import set_random_seed, generate_random_seed
 import atexit
 import traceback
@@ -66,6 +66,7 @@ class Experiment(object):
 #            raise DirtyRepoException("There are some tracked but uncommitted files. Please commit them or remove them from git tracking.")
             print(DirtyRepoException("There are some tracked but uncommitted files. Please commit them or remove them from git tracking."))
 
+
         self._set_experiments_directory(experiments_directory)
 
         #Store metadata about the repo
@@ -74,6 +75,7 @@ class Experiment(object):
         """dict: Metadata stored to metadata.json"""
         self.metadata['githead-sha'] = commit.hexsha
         self.metadata['githead-message'] = commit.message
+        self.metadata['git-diffs'] = DIFFS
         self.metadata['description'] = description
         self.metadata['start-time'] = datetime.datetime.now().isoformat()
         self.metadata['command'] = sys.argv
