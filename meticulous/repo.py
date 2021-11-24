@@ -13,10 +13,10 @@ for item in COMMIT.tree.traverse():
 
 for diff in REPO.head.commit.diff(None, create_patch=True, unified=0):
     if diff.renamed_file:
-        DIFFS.append({"file":diff.a_path, "renamed":True})
+        DIFFS.append({"file": diff.a_path, "renamed": True})
         continue
     if diff.a_path is not None:
-            DIFFS.append({"file": diff.a_path, "patch": diff.diff.decode()})
+        DIFFS.append({"file": diff.a_path, "patch": diff.diff.decode()})
 for f in REPO.untracked_files:
     if os.path.splitext(f)[1] in TRACKED_EXTENSIONS:
         DIFFS.append({"file": f, "patch": open(f,"r").read()})
