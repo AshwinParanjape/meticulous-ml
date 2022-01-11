@@ -269,7 +269,7 @@ class Experiment(object):
 
         default_args = parser.parse_args([])
         default_args = vars(default_args)
-        for arg in ['project_directory', 'experiments_directory', 'experiment_id', 'description', 'resume', 'norecord']:
+        for arg in ['project_directory', 'experiments_directory', 'experiment_id', 'description', 'resume', 'norecord', 'random_seed']:
             if arg in default_args:
                 del default_args[arg]
 
