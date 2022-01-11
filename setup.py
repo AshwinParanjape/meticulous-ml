@@ -38,7 +38,7 @@ setuptools.setup(
             "gitpython",
             "pandas",
             "tabulate",
-            "ruaml"
+            "ruamel.yaml"
         ],
         tests_require=[
             'pytest',
