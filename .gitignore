@@ -4,3 +4,4 @@ docsrc/_build/
 __pycache__/
 temp_files/experiments_meticulous.tests.test_experiment_writer.OutputTestCase.test_args
 build/temp_files/experiments_meticulous.tests.test_experiment_writer.OutputTestCase.test_default_args
+temp_files/experiments_meticulous.tests.test_experiment_writer.OutputTestCase.test_failure_on_arg_change_for_resumed_experiment
