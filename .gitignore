@@ -1,3 +1,5 @@
 meticulous/tests/experiments
 experiments
 docsrc/_build/
+__pycache__/
+temp_files/experiments_meticulous.tests.test_experiment_writer.OutputTestCase.test_args

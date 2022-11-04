@@ -32,17 +32,24 @@ class Tee(object):
     """
     def __init__(self, stdstream, fileobject):
         """
-        :param stdstream: output stream, that gets replaced by the Tee object
+        :param stdstream: name of the output stream, that gets replaced by the Tee object. Must be either stdout or stderr
         :param fileobject: output file object that needs to be flushed and closed
         """
+        if stdstream not in ["stdout", "stderr"]:
+            raise RuntimeError("sys.{} is not a valid stream to redirect.".format(stdstream))
         self.file = fileobject
-        self.stdstream = stdstream
-        stdstream = self
+        self.stdstream_name = stdstream
+        self.stdstream = sys.__dict__[stdstream]
+        sys.__dict__[stdstream] = self
+        self.closed = False
 
     def close(self):
         """Close the file and set the stdstream back to the original stdstream"""
-        stdstream = self.stdstream
+        if self.closed:
+            return
         self.file.close()
+        sys.__dict__[self.stdstream_name] = self.stdstream
+        self.closed = True
 
     def __del__(self):
         """Close the file and set the stdstream back to the original stdstream"""
