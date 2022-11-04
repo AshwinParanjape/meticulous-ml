@@ -1,6 +1,5 @@
 import sys, os, json, datetime
 from glob import glob
-from git import Repo
 from typing import Dict
 
 from meticulous.utils import Tee, ExitHooks
