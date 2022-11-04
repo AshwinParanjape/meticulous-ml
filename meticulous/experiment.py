@@ -4,10 +4,12 @@ from git import Repo
 from typing import Dict
 
 from meticulous.utils import Tee, ExitHooks
+from meticulous.repo import REPO, COMMIT
 import atexit
 import traceback
 import logging
 logger = logging.getLogger('meticulous')
+
 
 ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
@@ -65,7 +67,7 @@ class Experiment(object):
         self._set_experiments_directory(experiments_directory)
 
         #Store metadata about the repo
-        commit = self.repo.commit()
+        commit = COMMIT
         self.metadata = {}
         """dict: Metadata stored to metadata.json"""
         self.metadata['githead-sha'] = commit.hexsha
@@ -133,10 +135,8 @@ class Experiment(object):
             json.dump(self.metadata, f, indent=4)
 
         # Tee stdout and stderr to files as well
-        self.stdout = Tee(sys.stdout, self.open('stdout', 'a'))
-        sys.stdout = self.stdout
-        self.stderr = Tee(sys.stderr, self.open('stderr', 'a'))
-        sys.stderr = self.stderr
+        self.stdout = Tee("stdout", self.open('stdout', 'a'))
+        self.stderr = Tee("stderr", self.open('stderr', 'a'))
 
         self._set_status_file()
 
@@ -249,7 +249,7 @@ class Experiment(object):
 
     def _set_repo_directory(self):
         """Finds a git repo by searching the project and its parent directories and sets self.repo_directory"""
-        self.repo = Repo(self.project_directory, search_parent_directories=True)
+        self.repo = REPO
         logger.debug("Found git repo at {repo}".format(repo=self.repo))
 
         # Absolute path of the repo
@@ -273,11 +273,12 @@ class Experiment(object):
         # ignore the experiment directory from git tree if not ignored yet
         try:
             with open(os.path.join(self.repo_directory, '.gitignore'), 'r') as f:
-                ignored = os.path.relpath(self.experiments_directory, self.repo_directory) in [p.strip() for p in f.readlines()]
+                ignored = os.path.relpath(self.experiments_directory, self.repo_directory) in [os.path.normpath(p.strip()) for p in f.readlines()]
         except FileNotFoundError as e:
             print("Creating local .gitignore")
             ignored = False
-        if not ignored:
+        # if the experiment directory is located inside the repo, but not in the .gitignore
+        if not ignored and not os.path.relpath(self.experiments_directory, self.repo_directory).startswith(".."):
             print("Adding experiments directory to .gitignore")
             with open(os.path.join(self.repo_directory, '.gitignore'), 'a') as f:
                 f.write(os.path.relpath(self.experiments_directory, self.repo_directory)+'\n')
@@ -305,11 +306,42 @@ class Experiment(object):
                                               self.hooks.exc_info['exc_value'],
                                               self.hooks.exc_info['exc_traceback'],
                                               file=f)
+                    traceback.print_exception(self.hooks.exc_info['exc_type'],
+                                              self.hooks.exc_info['exc_value'],
+                                              self.hooks.exc_info['exc_traceback'],
+                                              file=sys.stderr)
                 else:
                     f.write('SUCCESS')
         with self.open('STATUS', 'w') as f:
             f.write('RUNNING')
-        atexit.register(exit_hook)
+        self.atexit_hook = exit_hook
+        atexit.register(self.atexit_hook)
+
+    def finish(self, status="SUCCESS"):
+        self.metadata['end-time'] = datetime.datetime.now().isoformat()
+        with self.open('metadata.json', 'w') as f:
+            json.dump(self.metadata, f, indent=4)
+        with self.open('STATUS', 'w') as f:
+            f.write(status)
+        atexit.unregister(self.atexit_hook)
+        self.stdout.close()
+        self.stderr.close()
+    
+    def __enter__(self):
+        return self
+    def __exit__(self, type, value, tb):
+        if type is not None:
+            self.finish("ERROR\n" + "\n".join(
+                traceback.format_exception(type,
+                                        value,
+                                        tb)
+            ))
+            traceback.print_exception(type,
+                                        value,
+                                        tb,
+                                        file=sys.stderr)
+            return True
+        self.finish()
 
 
 class DirtyRepoException(Exception):
