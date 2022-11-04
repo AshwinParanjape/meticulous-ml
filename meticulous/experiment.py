@@ -218,7 +218,7 @@ class Experiment(object):
                 meticulous_args[arg] = args[arg]
                 del args[arg]
         positional_args = parser._get_positional_actions()
-        default_args = parser.parse_args(arg_list[1:1+len(positional_args)])
+        default_args = parser.parse_args(arg_list[:len(positional_args)])
         default_args = vars(default_args)
         for arg in ['project_directory', 'experiments_directory', 'experiment_id', 'description', 'resume', 'norecord'] + [a.dest for a in positional_args]:
             if arg in default_args:
