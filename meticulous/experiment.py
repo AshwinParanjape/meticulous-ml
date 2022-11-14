@@ -195,7 +195,7 @@ class Experiment(object):
 
 
     @classmethod
-    def from_parser(cls, parser, arg_list = None, **default_meticulous_args):
+    def from_parser(cls, parser, arg_list = None, capture_defaults=True, **default_meticulous_args):
         """
         Extract meticulous specific arguments from argparse parser and return an Experiment object
 
@@ -203,6 +203,9 @@ class Experiment(object):
             parser: argparse parser
             arg_list: list of arguments, default is sys.argv[1:]
             **meticulous_args: any other args for constructing Experiment object that may not be in the parser
+            capture_defaults: If true, will capture the default arguments, but it is tricky to extract them with argparse
+                and it fails if there are required arguments starting with --
+
 
         Returns:
             Experiment object
@@ -216,12 +219,15 @@ class Experiment(object):
             if arg in args:
                 meticulous_args[arg] = args[arg]
                 del args[arg]
-        positional_args = parser._get_positional_actions()
-        default_args = parser.parse_args(arg_list[:len(positional_args)])
-        default_args = vars(default_args)
-        for arg in ['project_directory', 'experiments_directory', 'experiment_id', 'description', 'resume', 'norecord'] + [a.dest for a in positional_args]:
-            if arg in default_args:
-                del default_args[arg]
+        if capture_defaults:         
+            positional_args = parser._get_positional_actions()
+            default_args = parser.parse_args(arg_list[:len(positional_args)])
+            default_args = vars(default_args)
+            for arg in ['project_directory', 'experiments_directory', 'experiment_id', 'description', 'resume', 'norecord'] + [a.dest for a in positional_args]:
+                if arg in default_args:
+                    del default_args[arg]
+        else: 
+            default_args = None
 
         return cls(args, default_args=default_args, **meticulous_args)
 
