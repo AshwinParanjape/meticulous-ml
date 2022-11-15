@@ -323,14 +323,15 @@ class Experiment(object):
         atexit.register(self.atexit_hook)
 
     def finish(self, status="SUCCESS"):
-        self.metadata['end-time'] = datetime.datetime.now().isoformat()
-        with self.open('metadata.json', 'w') as f:
-            json.dump(self.metadata, f, indent=4)
-        with self.open('STATUS', 'w') as f:
-            f.write(status)
-        atexit.unregister(self.atexit_hook)
-        self.stdout.close()
-        self.stderr.close()
+        if not self.norecord:
+            self.metadata['end-time'] = datetime.datetime.now().isoformat()
+            with self.open('metadata.json', 'w') as f:
+                json.dump(self.metadata, f, indent=4)
+            with self.open('STATUS', 'w') as f:
+                f.write(status)
+            atexit.unregister(self.atexit_hook)
+            self.stdout.close()
+            self.stderr.close()
     
     def __enter__(self):
         return self
