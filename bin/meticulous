@@ -4,19 +4,28 @@ from meticulous import Experiments
 from meticulous.summary_utils import informative_cols
 import pandas as pd
 import numpy as np
-pd.set_option('display.max_colwidth', 20)
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
+# Set pandas display options
+pd.set_option('display.max_colwidth', 25)
 pd.set_option('display.max_columns', 0)
 pd.set_option('display.max_rows', None)
+pd.set_option('display.precision', 4)
 
-pd.set_option('precision', 4)
 def get_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('directory', action="store", help='Directory with stored experiments')
-    parser.add_argument('--columns', action="store", type=str, help="Comma-seperated list of columns to show")
+    parser.add_argument('--list_columns', action="store_true", help="List all the columns instead of the table")
+    parser.add_argument('--project-directory', action="store", type=str, help="Should be in a git repo")
+    parser.add_argument('--normalize_json_values', default=0, type=int, help="Unroll json formatted column values into separate columns, upto given levels deep")
+    parser.add_argument('--flat_cols', action="store_true", help="By default, columns names are split at period (.) and grouped into multilevel columns. This options keeps the columns flat")
+    parser.add_argument('--columns', action="store", nargs='+', type=str, help="Space-seperated list of columns to show. For multilevel columns, use period e.g. `header.sha`. ")
     parser.add_argument('--export', type=str, action="store", help='Export the results')
     parser.add_argument('--filter', type=str, action="store", help='Filter the results (Pandas Syntax)')
-    parser.add_argument('--groupby', type=str, action="store", help='Group and Aggregate the results (Pandas Syntax)')
-    parser.add_argument('--sort', type=str, action="store", help='Sort using these columns')
+    parser.add_argument('--groupby', type=str, action="store", nargs='+', help='Group and Aggregate the results by space separated columns. For multilevel columns use period. e.g. `header.sha`')
+    parser.add_argument('--sort', type=str, action="store", nargs='+', help='Sort using these space separated columns. For multilevel columns use period. e.g. `header.sha`')
     parser.add_argument('--sort_reverse', action="store_true", help='Reverse sort order')
 
     parser.add_argument("--args", type=str, choices=['none', 'truncated', 'non-default', 'all'], default='all',
@@ -25,68 +34,90 @@ def get_parser():
                              'truncated   - removes all values which stay constant across experiments\n,'
                              'non-default - shows arguments that modify default values\n'
                              'all         - all arguments')
-    parser.add_argument("--no_summary", dest="summary", action='store_false', help="Show experiment summary")
     parser.add_argument("--tail", type=int, default=-1, help="Show only the last n rows.")
     return parser
 
 if __name__ == '__main__':
     parser = get_parser()
     args = parser.parse_args()
-    exps = Experiments(experiments_directory=args.directory)
-    df = exps.as_dataframe()
-    display_df = df[['']]
+    exps = Experiments(experiments_directory=args.directory, project_directory=args.project_directory)
+    df = exps.as_dataframe(normalize_json_values=args.normalize_json_values)
+
+    # Collect header columns
+    display_df = df[['header']]
     dfs = [display_df]
 
+    # Collect args cols according to the option args.args
     if args.args == 'all':
         args_df = df[['args']]
         dfs.append(args_df)
     elif args.args == 'non-default':
         not_default_args = (df['args'] != df['default_args'])
         non_default_cols = [('args', c) for c, v in not_default_args.max().iteritems() if v]
+        logging.info("Using non-default args: {ic}".format(ic=non_default_cols))
         args_df = df[non_default_cols]
         dfs.append(args_df)
     elif args.args == 'truncated':
-        args_df = df[[('args', c) for c in informative_cols(df['args'])]]
+        ic = informative_cols(df['args'])
+        logging.info("Using informative args: {ic}".format(ic=ic))
+        args_df = df[[('args', c) for c in ic]]
         dfs.append(args_df)
     else:
         pass
 
-    # elif :
-    #    cols+=[['args', c] for c in informative_cols(df['args'])]
-    # df[cols]
-    if args.summary:
+    # Add summary columns if it exists
+    if 'summary' in df:
         dfs.append(df[['summary']])
+
     final_df = pd.concat(dfs, axis=1)
+
+    # Merge multilevel columns into a . separated flat string
+    # Keep the original tuples for later use
+    multilevel_cols = final_df.columns[:]
+    final_df.columns = ['.'.join([str(c) for c in mc if str(c)!='nan']) for mc in multilevel_cols]
     
-    final_df = final_df.reset_index().set_index([('', 'sha'), 'expid'])
-    final_df.columns = ['_'.join([x for x in col if x != ""]).strip() for col in final_df.columns.values]
+    # If args.list_columns==True, display the cols and exit
+    if args.list_columns:
+        print(final_df.columns)
+        exit(0)
+
+    # Otherwise continue to display the table
     if args.filter:
         try:
+            logging.info("Querying with {filter}".format(filter=args.filter))
             final_df = final_df.query(args.filter)
         except Exception as e:
-            print("Error in --filter: ", e)
-            print("Checkout https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.query.html" + \
+            logging.exception("Error in --filter: ", e)
+            logging.exception("Checkout https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.query.html" + \
                   "for an overview on the query syntax. \nAllowed columns: {}".format(final_df.columns))
+
     if args.groupby:
         try:
-            by = [x.strip() for x in args.groupby.split(",")]
-            final_df = final_df.groupby(by=by, dropna=False, group_keys=False, as_index=False) \
-                        .agg({k : [np.mean, np.std] if np.issubdtype(final_df.dtypes[k], np.float64) else np.size for k in final_df.columns if k not in by})
-            final_df.columns = ['_'.join([x for x in col if x != ""]).strip() for col in final_df.columns.values]
+            logging.info("Grouping by {by}".format(by=args.groupby))
+            final_df = final_df.groupby(by=args.groupby, dropna=False, group_keys=False, as_index=False) \
+                        .agg({k : np.mean if np.issubdtype(final_df.dtypes[k], np.float64) else np.size for k in final_df.columns if k not in args.groupby})
 
         except Exception as e:
             print("Error in --groupby: ", e)
             print("Checkout https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html for an intro to group-by for people who speak sql.")
-            print("We aggregate floats by average + std and count everything else. If you want different behavior, export a pandas dataframe with --export outfile.pd and then do it on your own")
+            print("We aggregate floats by average and count everything else. If you want different behavior, export a pandas dataframe with --export outfile.pd and then do it on your own. Or load the dataframe directly using `Experiments.as_dataframe()`")
     if args.columns:
-        final_df = final_df[[x.strip() for x in args.columns.split(",")]]
+        columns = [c for ac in args.columns for c in final_df.columns if c.startswith(ac)]
+        logging.info("Selecting columns {cols}".format(cols=columns))
+        final_df = final_df[columns]
     if args.sort:
-        by = [x.strip() for x in args.sort.split(",")]
-        final_df = final_df.sort_values(by=by, ascending=args.sort_reverse)
+        logging.info("Sorting values by {sort} in ascending {order}".format(sort=args.sort, order="ascending" if args.sort_reverse else "descending"))
+        final_df = final_df.sort_values(by=args.sort, ascending=args.sort_reverse)
     if args.tail > 0:
         final_df = final_df.tail(args.tail)
+
+    # Split into multlevel columns
+    if not args.flat_cols:
+        columns = pd.MultiIndex.from_tuples([mc for ac in final_df.columns for mc in multilevel_cols if '.'.join([str(c) for c in mc if str(c)!='nan']) == ac])
+        final_df.columns = columns 
     print(final_df)
     if args.export:
+        logging.info("Exporting to {export}".format(export=args.export))
         if args.export.endswith(".pd"):
             final_df.to_pickle(args.export)
         elif args.export.endswith(".csv"):
