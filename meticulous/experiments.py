@@ -97,6 +97,22 @@ class ExperimentReader(object):
     def __repr__(self):
         return self.curexpdir
 
+    def df_vars(self):
+        return dict(
+            header=dict(
+                expid=self.expid,
+                sha=self.sha,
+                start_time=self.start_time,
+                status=self.status,
+                status_message=self.status_message,
+            ),
+            args=self.args,
+            default_args=self.default_args,
+            metadata=self.metadata,
+            summary=self.summary,
+        )
+
+
 class Experiments(object):
     """Class to load an experiments folder"""
     def __init__(self, project_directory:str = '', experiments_directory:str = None, reader = ExperimentReader):
@@ -123,6 +139,7 @@ class Experiments(object):
     def refresh_experiments(self):
         """Read experiments from the file system"""
         experiments = []
+        print("Reading experiments from {dir}".format(dir=self.experiments_directory), file=sys.stdout)
         for exp in glob(self.experiments_directory+'/*/'):
             try:
                 experimentReader = self.reader(exp)
@@ -134,16 +151,15 @@ class Experiments(object):
         self.experiments = {e.expid: e for e in sorted(experiments, key = lambda expReader: expReader.start_time)}
 
 
-    def as_dataframe(self):
+    def as_dataframe(self, normalize_json_values=0):
         """Returns all experiment data as a pandas dataframe"""
         if len(self.experiments.values()) > 0:
-            df = json_normalize([vars(e) for e in self.experiments.values()]).set_index('expid')
+            df = json_normalize([e.df_vars() for e in self.experiments.values()], max_level=1+normalize_json_values)
 
-            # Convert json_normalized columns into multilevel columns for ease of use and nicer printing
-            max_col_levels = max(len(c.split('.')) for c in df.columns)
             df.columns = pd.MultiIndex.from_tuples(
-                [[''] * (max_col_levels - len(level_vals.split('.'))) + level_vals.split('.') for level_vals in
+                [level_vals.split('.') for level_vals in
                  df.columns])
+            df = df.set_index(('header', 'expid'))
             return df
         else:
             raise IndexError("Unable to load any experiments")
