@@ -3,7 +3,6 @@ from glob import glob
 from typing import Dict
 
 from meticulous.utils import Tee, ExitHooks
-from git.repo import Repo
 import atexit
 import traceback
 import logging
@@ -254,6 +253,9 @@ class Experiment(object):
 
     def _set_repo_directory(self):
         """Finds a git repo by searching the project and its parent directories and sets self.repo_directory"""
+        # Import here so that we don't throw an error if we simply import this file
+        from git.repo import Repo
+        
         self.repo = Repo(self.project_directory, search_parent_directories=True)
         logger.debug("Found git repo at {repo}".format(repo=self.repo))
 
